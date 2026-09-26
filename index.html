@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movie Finder</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header class="navbar">
+            <a href="#" class="logo">Movie Finder</a>
+            <nav class="nav-links">
+                <a href="#">Movies</a>
+                <a href="#">TV shows</a>
+                <a href="#">People</a>
+            </nav>
+            <button class="nav-search">&#128269;</button>
+        </header>
+        <section class="hero">
+            <h1>Welcome.</h1>
+            <p>Millions of movies, TV shows and people to discover. Explore now!</p>
+            <form class="search-form" id="searchForm">
+                <input type="text" id="searchInput" placeholder="Search for a movie...">
+                <button type="submit">Search</button>
+            </form>
+        </section>
+        <main class="trending">
+            <div class="section-header">
+                <h2>Trending</h2>
+                <div class="toggle">
+                    <button class="active" data-time="day">Today</button>
+                    <button data-time="week">This Week</button>
+                </div>
+            </div>
+            <div class="movies" id="movies"></div>
+        </main>
+
+        <script src="main.js"></script>
+    </body>
+</html>
