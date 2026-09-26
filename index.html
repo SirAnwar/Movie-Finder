@@ -10,12 +10,31 @@
         <header class="navbar">
             <a href="#" class="logo">Movie Finder</a>
             <nav class="nav-links">
-                <a href="#">Movies</a>
-                <a href="#">TV shows</a>
-                <a href="#">People</a>
+                <div class="nav-item">
+                    <a href="#" data-type="movie">Movies</a>
+                    <div class="submenu">
+                        <a href="#" data-category="popular">Popular</a>
+                        <a href="#" data-category="now_playing">Now Playing</a>
+                        <a href="#" data-category="upcoming">Upcoming</a>
+                        <a href="#" data-category="top_rated">Top Rated</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-type="tv">TV shows</a>
+                    <div class="submenu">
+                        <a href="#" data-category="popular">Popular</a>
+                        <a href="#" data-category="airing_today">Airing Today</a>
+                        <a href="#" data-category="on_the_air">On TV</a>
+                        <a href="#" data-category="top_rated">Top Rated</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#" data-type="person">People</a>
+                </div>
             </nav>
             <button class="nav-search">&#128269;</button>
         </header>
+
         <section class="hero">
             <h1>Welcome.</h1>
             <p>Millions of movies, TV shows and people to discover. Explore now!</p>
@@ -24,6 +43,7 @@
                 <button type="submit">Search</button>
             </form>
         </section>
+
         <main class="trending">
             <div class="section-header">
                 <h2>Trending</h2>
