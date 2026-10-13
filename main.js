@@ -1,3 +1,7 @@
+// Config
+const API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZmRhMTc3MDhlMjI2NTBjN2I4MDI0ODY0YjkxZjNmMyIsIm5iZiI6MTc4OTQ5MDgyOC4xNjQsInN1YiI6IjZhYTk3NjhjMTk1ZTQwNzMyYmQzZmFkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._vnlOawoTyZolx9S3oD3DE3Lw66XmwYEMHGILtQM-LI";
+const BASE_URL = "https://api.themoviedb.org/3";
+
 // Elements 
 const menuLinks = document.querySelectorAll(".nav-item:has(.submenu) > a");
 const menuToggle = document.getElementById("menuToggle");
@@ -35,3 +39,17 @@ navSearch.addEventListener("click", () => {
     searchInput.scrollIntoView({ behavior: "smooth" });
     searchInput.focus({ preventScroll: true });
 });
+
+
+// API 
+async function getTrending() {
+    const response = await fetch(`${BASE_URL}/trending/movie/day`,{
+        headers: {
+            authorization: `Bearer ${API_TOKEN}`,
+        },
+    });
+    const data = await response.json();
+    console.log(data);
+    
+}
+getTrending();
