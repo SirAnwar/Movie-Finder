@@ -9,6 +9,7 @@ const menuToggle = document.getElementById("menuToggle");
 const navSearch = document.getElementById("navSearch");
 const searchInput = document.getElementById("searchInput");
 const moviesContainer = document.getElementById("movies");
+const timeButtons = document.querySelectorAll("[data-time]");
 
 // Submenus
 menuLinks.forEach((link) => {
@@ -40,6 +41,15 @@ navSearch.addEventListener("click", () => {
     }
     searchInput.scrollIntoView({ behavior: "smooth" });
     searchInput.focus({ preventScroll: true });
+});
+
+// Time toggle
+timeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        timeButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        getTrending(button.dataset.time);
+    });
 });
 
 // Render
@@ -75,8 +85,8 @@ function renderMovies(movies) {
 
 
 // API 
-async function getTrending() {
-    const response = await fetch(`${BASE_URL}/trending/movie/day`, {
+async function getTrending(time) {
+    const response = await fetch(`${BASE_URL}/trending/movie/${time}`, {
         headers: {
             authorization: `Bearer ${API_TOKEN}`,
         },
@@ -84,4 +94,4 @@ async function getTrending() {
     const data = await response.json();
     renderMovies(data.results);
 }
-getTrending();
+getTrending("day");
