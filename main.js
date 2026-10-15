@@ -10,6 +10,11 @@ const navSearch = document.getElementById("navSearch");
 const searchInput = document.getElementById("searchInput");
 const moviesContainer = document.getElementById("movies");
 const timeButtons = document.querySelectorAll("[data-time]");
+const typeLinks = document.querySelectorAll("[data-type]");
+
+// State 
+let currentType = "movie";
+let currentTime = "day";
 
 // Submenus
 menuLinks.forEach((link) => {
@@ -48,7 +53,17 @@ timeButtons.forEach((button) => {
     button.addEventListener("click", () => {
         timeButtons.forEach((btn) => btn.classList.remove("active"));
         button.classList.add("active");
-        getTrending(button.dataset.time);
+        currentTime = button.dataset.time;
+        getTrending(currentType, currentTime);
+    });
+});
+
+// Type links
+typeLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+        event.preventDefault();
+        currentType = link.dataset.type;
+        getTrending(currentType, currentTime);
     });
 });
 
@@ -67,16 +82,18 @@ function formatDate(dateString) {
     });
 }
 function createMovieCard(movie) {
+    const title = movie.title || movie.name;
+    const date = movie.release_date || movie.first_air_date; 
     const rating = movie.vote_average.toFixed(1);
     const ratingClass = getRatingClass(movie.vote_average);
     return `
                 <article class="movie">
                     <div class="poster">
-                        <img src="${IMAGE_URL}${movie.poster_path}" alt="${movie.title}">
+                        <img src="${IMAGE_URL}${movie.poster_path}" alt="${title}">
                         <span class="rating ${ratingClass}">${rating}</span>
                     </div>
-                    <h3>${movie.title}</h3>
-                    <p>${formatDate(movie.release_date)}</p>
+                    <h3>${title}</h3>
+                    <p>${formatDate(date)}</p>
                 </article>`
 }
 function renderMovies(movies) {
@@ -85,8 +102,8 @@ function renderMovies(movies) {
 
 
 // API 
-async function getTrending(time) {
-    const response = await fetch(`${BASE_URL}/trending/movie/${time}`, {
+async function getTrending(type, time) {
+    const response = await fetch(`${BASE_URL}/trending/${type}/${time}`, {
         headers: {
             authorization: `Bearer ${API_TOKEN}`,
         },
@@ -94,4 +111,4 @@ async function getTrending(time) {
     const data = await response.json();
     renderMovies(data.results);
 }
-getTrending("day");
+getTrending(currentType, currentTime);
