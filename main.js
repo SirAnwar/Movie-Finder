@@ -2,6 +2,11 @@
 const API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZmRhMTc3MDhlMjI2NTBjN2I4MDI0ODY0YjkxZjNmMyIsIm5iZiI6MTc4OTQ5MDgyOC4xNjQsInN1YiI6IjZhYTk3NjhjMTk1ZTQwNzMyYmQzZmFkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._vnlOawoTyZolx9S3oD3DE3Lw66XmwYEMHGILtQM-LI";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+const PLACEHOLDERS = {
+    movie: "Search for a movie...",
+    tv: "Search for a TV show...",
+    person: "Search for a person...",
+};
 
 // Elements 
 const menuLinks = document.querySelectorAll(".nav-item:has(.submenu) > a");
@@ -63,6 +68,7 @@ typeLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
         event.preventDefault();
         currentType = link.dataset.type;
+        searchInput.placeholder = PLACEHOLDERS[currentType];
         getTrending(currentType, currentTime);
     });
 });
@@ -83,7 +89,7 @@ function formatDate(dateString) {
 }
 function createMovieCard(movie) {
     const title = movie.title || movie.name;
-    const date = movie.release_date || movie.first_air_date; 
+    const date = movie.release_date || movie.first_air_date;
     const rating = movie.vote_average.toFixed(1);
     const ratingClass = getRatingClass(movie.vote_average);
     return `
@@ -96,8 +102,22 @@ function createMovieCard(movie) {
                     <p>${formatDate(date)}</p>
                 </article>`
 }
-function renderMovies(movies) {
-    moviesContainer.innerHTML = movies.map(createMovieCard).join("");
+function createPersonCard(person) {
+    return `
+                <article class="movie">
+                    <div class="poster">
+                        <img src="${IMAGE_URL}${person.profile_path}" alt="${person.name}">
+                    </div>
+                    <h3>${person.name}</h3>
+                    <p>${person.known_for_department}</p>
+                </article>`;
+}
+function renderMovies(movies, type) {
+    if (type === "person") {
+        moviesContainer.innerHTML = movies.map(createPersonCard).join("");
+    } else {
+        moviesContainer.innerHTML = movies.map(createMovieCard).join("");
+    }
 }
 
 
@@ -109,6 +129,6 @@ async function getTrending(type, time) {
         },
     });
     const data = await response.json();
-    renderMovies(data.results);
+    renderMovies(data.results, type);
 }
 getTrending(currentType, currentTime);
