@@ -16,6 +16,9 @@ const searchInput = document.getElementById("searchInput");
 const moviesContainer = document.getElementById("movies");
 const timeButtons = document.querySelectorAll("[data-time]");
 const typeLinks = document.querySelectorAll("[data-type]");
+const categoryLinks = document.querySelectorAll("[data-category]");
+const sectionTitle = document.getElementById("sectionTitle");
+const timeToggle = document.getElementById("timeToggle");
 
 // State 
 let currentType = "movie";
@@ -70,6 +73,19 @@ typeLinks.forEach((link) => {
         currentType = link.dataset.type;
         searchInput.placeholder = PLACEHOLDERS[currentType];
         getTrending(currentType, currentTime);
+        setSectionHeader("Trending", false);
+    });
+});
+
+// Category links
+categoryLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const typeLink = link.closest(".nav-item").querySelector("[data-type]");
+        const type = typeLink.dataset.type;
+        const category = link.dataset.category;
+        getCategory(type, category);
+        setSectionHeader(typeLink.textContent + " › " + link.textContent, true);
     });
 });
 
@@ -119,16 +135,29 @@ function renderMovies(movies, type) {
         moviesContainer.innerHTML = movies.map(createMovieCard).join("");
     }
 }
+function setSectionHeader(title, hideTime) {
+    sectionTitle.textContent = title;
+    timeToggle.hidden = hideTime;
+}
 
 
 // API 
-async function getTrending(type, time) {
-    const response = await fetch(`${BASE_URL}/trending/${type}/${time}`, {
+async function fetchFromTMDB(path) {
+    const response = await fetch(`${BASE_URL}${path}`, {
         headers: {
             authorization: `Bearer ${API_TOKEN}`,
         },
     });
-    const data = await response.json();
+    return response.json();
+}
+
+async function getTrending(type, time) {
+    const data = await fetchFromTMDB(`/trending/${type}/${time}`);
+    renderMovies(data.results, type);
+}
+
+async function getCategory(type, category) {
+    const data = await fetchFromTMDB(`/${type}/${category}`);
     renderMovies(data.results, type);
 }
 getTrending(currentType, currentTime);
