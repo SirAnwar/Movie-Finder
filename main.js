@@ -101,12 +101,16 @@ searchForm.addEventListener("submit", (event) => {
 });
 
 // Render
+function getImageUrl(path) {
+    return path ? IMAGE_URL + path : "images/no-image.svg";
+}
 function getRatingClass(score) {
     if (score >= 7) return "high";
     if (score >= 5) return "mid";
     return "low";
 }
 function formatDate(dateString) {
+    if (!dateString) return "Unknown date";
     return new Date(dateString).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -122,7 +126,7 @@ function createMovieCard(movie) {
     return `
                 <article class="movie">
                     <div class="poster">
-                        <img src="${IMAGE_URL}${movie.poster_path}" alt="${title}">
+                        <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
                         <span class="rating ${ratingClass}">${rating}</span>
                     </div>
                     <h3>${title}</h3>
@@ -133,13 +137,17 @@ function createPersonCard(person) {
     return `
                 <article class="movie">
                     <div class="poster">
-                        <img src="${IMAGE_URL}${person.profile_path}" alt="${person.name}">
+                        <img src="${getImageUrl(person.profile_path)}" alt="${person.name}">
                     </div>
                     <h3>${person.name}</h3>
                     <p>${person.known_for_department}</p>
                 </article>`;
 }
 function renderMovies(movies, type) {
+    if (movies.length === 0) {
+        showMessage("No results found.");
+        return;
+    }
     if (type === "person") {
         moviesContainer.innerHTML = movies.map(createPersonCard).join("");
     } else {
@@ -151,6 +159,9 @@ function setSectionHeader(title, hideTime) {
     timeToggle.hidden = hideTime;
 }
 
+function showMessage(text) {
+    moviesContainer.innerHTML = `<p class="message">${text}</p>`;
+}
 
 // API 
 async function fetchFromTMDB(path) {
@@ -159,22 +170,31 @@ async function fetchFromTMDB(path) {
             authorization: `Bearer ${API_TOKEN}`,
         },
     });
+    if (!response.ok) throw new Error(`TMDB error: ${response.status}`);
     return response.json();
 }
 
-async function getTrending(type, time) {
-    const data = await fetchFromTMDB(`/trending/${type}/${time}`);
-    renderMovies(data.results, type);
+async function loadMovies(path, type) {
+    showMessage("Loading...");
+    try {
+        const data = await fetchFromTMDB(path);
+        renderMovies(data.results, type);
+    } catch (error) {
+        console.error(error);
+        showMessage("Something went wrong. Please try again.");
+    }
 }
 
-async function getCategory(type, category) {
-    const data = await fetchFromTMDB(`/${type}/${category}`);
-    renderMovies(data.results, type);
+function getTrending(type, time) {
+    loadMovies(`/trending/${type}/${time}`, type);
 }
 
-async function getSearch(type, query) {
-    const data = await fetchFromTMDB(`/search/${type}?query=${encodeURIComponent(query)}`);
-    renderMovies(data.results, type);
+function getCategory(type, category) {
+    loadMovies(`/${type}/${category}`, type);
+}
+
+function getSearch(type, query) {
+    loadMovies(`/search/${type}?query=${encodeURIComponent(query)}`, type);
 }
 
 getTrending(currentType, currentTime);
