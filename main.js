@@ -19,6 +19,7 @@ const typeLinks = document.querySelectorAll("[data-type]");
 const categoryLinks = document.querySelectorAll("[data-category]");
 const sectionTitle = document.getElementById("sectionTitle");
 const timeToggle = document.getElementById("timeToggle");
+const searchForm = document.getElementById("searchForm");
 
 // State 
 let currentType = "movie";
@@ -87,6 +88,16 @@ categoryLinks.forEach((link) => {
         getCategory(type, category);
         setSectionHeader(typeLink.textContent + " › " + link.textContent, true);
     });
+});
+
+// Search
+searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
+    if (!query) return;
+    const typeName = document.querySelector(`[data-type="${currentType}"]`).textContent;
+    setSectionHeader(`${typeName} › "${query}"`, true);
+    getSearch(currentType, query);
 });
 
 // Render
@@ -160,4 +171,10 @@ async function getCategory(type, category) {
     const data = await fetchFromTMDB(`/${type}/${category}`);
     renderMovies(data.results, type);
 }
+
+async function getSearch(type, query) {
+    const data = await fetchFromTMDB(`/search/${type}?query=${encodeURIComponent(query)}`);
+    renderMovies(data.results, type);
+}
+
 getTrending(currentType, currentTime);
