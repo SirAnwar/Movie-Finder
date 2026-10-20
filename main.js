@@ -1,6 +1,5 @@
 // Config
-const API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZmRhMTc3MDhlMjI2NTBjN2I4MDI0ODY0YjkxZjNmMyIsIm5iZiI6MTc4OTQ5MDgyOC4xNjQsInN1YiI6IjZhYTk3NjhjMTk1ZTQwNzMyYmQzZmFkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._vnlOawoTyZolx9S3oD3DE3Lw66XmwYEMHGILtQM-LI";
-const BASE_URL = "https://api.themoviedb.org/3";
+const BASE_URL = "/api";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 const PLACEHOLDERS = {
     movie: "Search for a movie...",
@@ -165,11 +164,7 @@ function showMessage(text) {
 
 // API 
 async function fetchFromTMDB(path) {
-    const response = await fetch(`${BASE_URL}${path}`, {
-        headers: {
-            authorization: `Bearer ${API_TOKEN}`,
-        },
-    });
+    const response = await fetch(`${BASE_URL}${path}`);
     if (!response.ok) throw new Error(`TMDB error: ${response.status}`);
     return response.json();
 }
