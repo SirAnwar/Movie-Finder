@@ -100,6 +100,15 @@ h2,
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s;
+        border-left: 2px solid var(--hover-color);
+        margin-left: 0.75rem;
+
+        a {
+            color: color-mix(in srgb, var(--hover-color), black 25%);
+            &:hover {
+                color: black;
+            }
+        }
 
         .nav-item.open & {
             max-height: 300px;
@@ -188,6 +197,8 @@ h2,
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
     h2 {
         font-size: 2rem;
@@ -220,7 +231,10 @@ h2,
         }
         .poster {
             position: relative;
-            
+            &:has(.rating) {
+                margin-bottom: 1.25rem;
+            }
+
             .rating {
                 position: absolute;
                 left: 0.5rem;
@@ -239,7 +253,7 @@ h2,
             }
         }
         h3 {
-            margin-top: 1.75rem;
+            margin-top: 0.5rem;
             font-size: 1rem;
         }
         p {
