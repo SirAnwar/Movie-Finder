@@ -20,11 +20,14 @@ const sectionTitle = document.getElementById("sectionTitle");
 const timeToggle = document.getElementById("timeToggle");
 const searchForm = document.getElementById("searchForm");
 const loadMoreButton = document.getElementById("loadMore");
+const detailsDialog = document.getElementById("details");
+const closeDetailsButton = document.getElementById("closeDetails");
+const detailsContent = document.getElementById("detailsContent");
 
 // State 
 let currentType = "movie";
 let currentTime = "day";
-let lastLoad = {path: "", type: "", page: 1};
+let lastLoad = { path: "", type: "", page: 1 };
 
 // Submenus
 menuLinks.forEach((link) => {
@@ -73,7 +76,7 @@ typeLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
         event.preventDefault();
         currentType = link.dataset.type;
-        searchInput.placeholder = PLACEHOLDERS[currentType];
+        searchInput.placeholder = PLACEHOLDERS[ currentType ];
         getTrending(currentType, currentTime);
         setSectionHeader("Trending", false);
     });
@@ -106,6 +109,31 @@ loadMoreButton.addEventListener("click", () => {
     loadMovies(lastLoad.path, lastLoad.type, lastLoad.page + 1);
 });
 
+// Details
+moviesContainer.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-id]");
+    if (!card) return;
+    openDetails(lastLoad.type, card.dataset.id);
+});
+
+closeDetailsButton.addEventListener("click", () => {
+    detailsDialog.close();
+});
+
+detailsDialog.addEventListener("click", (event) => {
+    if (event.target === detailsDialog) detailsDialog.close();
+});
+
+detailsContent.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-key]");
+    if (!button) return;
+    detailsContent.insertAdjacentHTML("afterbegin", `<iframe class="player" src="https://www.youtube-nocookie.com/embed/${button.dataset.key}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`);
+    button.remove();
+});
+
+detailsDialog.addEventListener("close", () => {
+    detailsContent.innerHTML = "";
+});
 
 // Render
 function getImageUrl(path) {
@@ -131,7 +159,7 @@ function createMovieCard(movie) {
     const rating = movie.vote_average.toFixed(1);
     const ratingClass = getRatingClass(movie.vote_average);
     return `
-                <article class="movie">
+                <article class="movie" data-id="${movie.id}">
                     <div class="poster">
                         <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
                         <span class="rating ${ratingClass}">${rating}</span>
@@ -142,7 +170,7 @@ function createMovieCard(movie) {
 }
 function createPersonCard(person) {
     return `
-                <article class="movie">
+                <article class="movie" data-id="${person.id}">
                     <div class="poster">
                         <img src="${getImageUrl(person.profile_path)}" alt="${person.name}">
                     </div>
@@ -150,6 +178,39 @@ function createPersonCard(person) {
                     <p>${person.known_for_department}</p>
                 </article>`;
 }
+
+function createMovieDetails(movie) {
+    const title = movie.title || movie.name;
+    const date = movie.release_date || movie.first_air_date;
+    const year = date ? date.slice(0, 4) : "Unknown";
+    const length = movie.number_of_seasons ? `${movie.number_of_seasons} seasons` : `${movie.runtime} min`;
+    const genres = movie.genres.map((genre) => genre.name).join(", ");
+    const trailer = movie.videos.results.find((video) => video.site === "YouTube" && video.type === "Trailer");
+
+    return `
+        <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
+        <div class="details-info">
+            <h2>${title}</h2>
+            ${movie.tagline ? `<p class="tagline">${movie.tagline}</p>` : ""}
+            <p class="meta">⭐ ${movie.vote_average.toFixed(1)} • ${year} • ${length}</p>
+            <p class="genres">${genres}</p>
+                ${trailer ? `<button class="trailer" data-key="${trailer.key}">▶ Watch trailer</button>` : ""}
+            <p>${movie.overview || "No overview available."}</p>
+        </div>`;
+}
+
+function createPersonDetails(person) {
+    const place = person.place_of_birth || "Unknown";
+    return `
+        <img src="${getImageUrl(person.profile_path)}" alt="${person.name}">
+        <div class="details-info">
+            <h2>${person.name}</h2>
+            <p class="meta">${person.known_for_department}</p>
+            <p class="meta">🎂 ${formatDate(person.birthday)} • ${place}</p>
+            <p>${person.biography || "No biography available."}</p>
+        </div>`;
+}
+
 function renderMovies(movies, type, append) {
     if (movies.length === 0 && !append) {
         showMessage("No results found.");
@@ -205,6 +266,14 @@ function getCategory(type, category) {
 
 function getSearch(type, query) {
     loadMovies(`/search/${type}?query=${encodeURIComponent(query)}`, type);
+}
+
+async function openDetails(type, id) {
+    const data = await fetchFromTMDB(`/${type}/${id}?append_to_response=videos`);
+    const createDetails = type === "person" ? createPersonDetails : createMovieDetails;
+    detailsContent.innerHTML = createDetails(data);
+
+    detailsDialog.showModal();
 }
 
 getTrending(currentType, currentTime);
