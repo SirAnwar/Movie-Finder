@@ -19,10 +19,12 @@ const categoryLinks = document.querySelectorAll("[data-category]");
 const sectionTitle = document.getElementById("sectionTitle");
 const timeToggle = document.getElementById("timeToggle");
 const searchForm = document.getElementById("searchForm");
+const loadMoreButton = document.getElementById("loadMore");
 
 // State 
 let currentType = "movie";
 let currentTime = "day";
+let lastLoad = {path: "", type: "", page: 1};
 
 // Submenus
 menuLinks.forEach((link) => {
@@ -99,6 +101,12 @@ searchForm.addEventListener("submit", (event) => {
     getSearch(currentType, query);
 });
 
+// Load more
+loadMoreButton.addEventListener("click", () => {
+    loadMovies(lastLoad.path, lastLoad.type, lastLoad.page + 1);
+});
+
+
 // Render
 function getImageUrl(path) {
     return path ? IMAGE_URL + path : "images/no-image.svg";
@@ -142,15 +150,17 @@ function createPersonCard(person) {
                     <p>${person.known_for_department}</p>
                 </article>`;
 }
-function renderMovies(movies, type) {
-    if (movies.length === 0) {
+function renderMovies(movies, type, append) {
+    if (movies.length === 0 && !append) {
         showMessage("No results found.");
         return;
     }
-    if (type === "person") {
-        moviesContainer.innerHTML = movies.map(createPersonCard).join("");
+    const createCard = type === "person" ? createPersonCard : createMovieCard;
+    const cards = movies.map(createCard).join("");
+    if (append) {
+        moviesContainer.insertAdjacentHTML("beforeend", cards);
     } else {
-        moviesContainer.innerHTML = movies.map(createMovieCard).join("");
+        moviesContainer.innerHTML = cards;
     }
 }
 function setSectionHeader(title, hideTime) {
@@ -169,16 +179,21 @@ async function fetchFromTMDB(path) {
     return response.json();
 }
 
-async function loadMovies(path, type) {
-    showMessage("Loading...");
+async function loadMovies(path, type, page = 1) {
+    if (page === 1) showMessage("Loading...");
+    loadMoreButton.hidden = true;
+    lastLoad = { path: path, type: type, page: page };
+    const separator = path.includes("?") ? "&" : "?";
     try {
-        const data = await fetchFromTMDB(path);
-        renderMovies(data.results, type);
+        const data = await fetchFromTMDB(`${path}${separator}page=${page}`);
+        renderMovies(data.results, type, page > 1);
+        loadMoreButton.hidden = data.page >= data.total_pages;
     } catch (error) {
         console.error(error);
         showMessage("Something went wrong. Please try again.");
     }
 }
+
 
 function getTrending(type, time) {
     loadMovies(`/trending/${type}/${time}`, type);
