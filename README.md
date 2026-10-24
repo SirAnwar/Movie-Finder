@@ -2,7 +2,9 @@
 
 A movie discovery website built with vanilla JavaScript and the TMDB API. Browse trending movies, TV shows and people, filter by category (Popular, Top Rated, Upcoming), and search by title.
 
-**Live demo:** https://anwar-movie-finder.netlify.app
+**Live demo:** https://anwar-movie-finder.netlify.app <img width="2880" height="1800" alt="Screenshot (869)" src="https://github.com/user-attachments/assets/5fabe9e7-1896-4938-982e-84f1c2a1c1f1" />
+<img width="2880" height="1800" alt="Screenshot (882)" src="https://github.com/user-attachments/assets/85774536-16a7-4a19-bdd3-59505815346a" />
+
 
 ## Features
 - Trending (Today / This Week), categories and search, with "Load more" pagination
