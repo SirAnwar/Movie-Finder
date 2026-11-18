@@ -116,6 +116,9 @@ function createMovieCard(movie) {
                 <article class="movie" data-id="${movie.id}">
                     <div class="poster">
                         <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
+                        <button class="heart" aria-label="إضافة إلى المفضلة">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.6 8.4 2.4 5 6 5c2 0 3.4 1 4 2.2.6-1.2 2-2.2 4-2.2 3.6 0 5.4 3.4 4 6.7-2.5 4.7-10 9.3-10 9.3z"/></svg>
+                        </button>
                         <span class="rating ${ratingClass}">${rating}</span>
                     </div>
                     <h3>${title}</h3>
