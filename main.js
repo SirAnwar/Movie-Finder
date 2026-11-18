@@ -2,9 +2,9 @@
 const BASE_URL = "/api";
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 const PLACEHOLDERS = {
-    movie: "Search for a movie...",
-    tv: "Search for a TV show...",
-    person: "Search for a person...",
+    movie: "ابحث عن فيلم…",
+    tv: "ابحث عن مسلسل…",
+    person: "ابحث عن شخص…",
 };
 
 // Elements 
@@ -44,7 +44,7 @@ typeLinks.forEach((link) => {
         currentType = link.dataset.type;
         searchInput.placeholder = PLACEHOLDERS[ currentType ];
         getTrending(currentType, currentTime);
-        setSectionHeader("Trending", false);
+        setSectionHeader("الرائج", false);
     });
 });
 
@@ -99,18 +99,21 @@ function getRatingClass(score) {
     return "low";
 }
 function formatDate(dateString) {
-    if (!dateString) return "Unknown date";
-    return new Date(dateString).toLocaleDateString("en-US", {
-        month: "short",
+    if (!dateString) return "تاريخ غير معروف";
+    return new Date(dateString).toLocaleDateString("ar-EG", {
+        month: "long",
         day: "numeric",
         year: "numeric",
         timeZone: "UTC",
     });
 }
+function formatRating(score) {
+    return score.toLocaleString("ar-EG", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
 function createMovieCard(movie) {
     const title = movie.title || movie.name;
     const date = movie.release_date || movie.first_air_date;
-    const rating = movie.vote_average.toFixed(1);
+    const rating = formatRating(movie.vote_average);
     const ratingClass = getRatingClass(movie.vote_average);
     return `
                 <article class="movie" data-id="${movie.id}">
@@ -149,7 +152,7 @@ function createMovieDetails(movie) {
         <div class="details-info">
             <h2>${title}</h2>
             ${movie.tagline ? `<p class="tagline">${movie.tagline}</p>` : ""}
-            <p class="meta">⭐ ${movie.vote_average.toFixed(1)} • ${year} • ${length}</p>
+            <p class="meta">⭐ ${formatRating(movie.vote_average)} • ${year} • ${length}</p>
             <p class="genres">${genres}</p>
                 ${trailer ? `<button class="trailer" data-key="${trailer.key}">▶ Watch trailer</button>` : ""}
             <p>${movie.overview || "No overview available."}</p>
@@ -170,7 +173,7 @@ function createPersonDetails(person) {
 
 function renderMovies(movies, type, append) {
     if (movies.length === 0 && !append) {
-        showMessage("No results found.");
+        showMessage("لا توجد نتائج.");
         return;
     }
     const createCard = type === "person" ? createPersonCard : createMovieCard;
@@ -198,7 +201,7 @@ async function fetchFromTMDB(path) {
 }
 
 async function loadMovies(path, type, page = 1) {
-    if (page === 1) showMessage("Loading...");
+    if (page === 1) showMessage("جارٍ التحميل…");
     loadMoreButton.hidden = true;
     lastLoad = { path: path, type: type, page: page };
     const separator = path.includes("?") ? "&" : "?";
@@ -208,7 +211,7 @@ async function loadMovies(path, type, page = 1) {
         loadMoreButton.hidden = data.page >= data.total_pages;
     } catch (error) {
         console.error(error);
-        showMessage("Something went wrong. Please try again.");
+        showMessage("حدث خطأ ما، يرجى المحاولة مرة أخرى.");
     }
 }
 

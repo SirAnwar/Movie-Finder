@@ -26,25 +26,27 @@
         </header>
 
         <section class="hero">
-            <h1>Welcome.</h1>
-            <p>Millions of movies, TV shows and people to discover. Explore now!</p>
-            <form class="search-form" id="searchForm">
-                <input type="text" id="searchInput" placeholder="Search for a movie...">
-                <button type="submit">Search</button>
+            <h1>اعثر على فيلمك <span>المفضّل</span> القادم</h1>
+            <p>ملايين الأفلام والمسلسلات والنجوم — ابحث، واحفظ، وتابع ما تحب.</p>
+            <form class="search-form" id="searchForm" role="search">
+                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <label for="searchInput" class="visually-hidden">ابحث عن فيلم أو مسلسل أو شخص</label>
+                <input type="text" id="searchInput" placeholder="ابحث عن فيلم…">
+                <button type="submit" class="btn btn-primary">بحث</button>
             </form>
         </section>
 
         <main class="trending">
             <div class="section-header">
-                <h2 id="sectionTitle">Trending</h2>
+                <h2 id="sectionTitle">الرائج</h2>
                 <div class="toggle" id="timeToggle">
-                    <button class="active" data-time="day">Today</button>
-                    <button data-time="week">This Week</button>
+                    <button class="active" data-time="day">اليوم</button>
+                    <button data-time="week">هذا الأسبوع</button>
                 </div>
             </div>
             <div class="movies" id="movies">
             </div>
-            <button class="load-more" id="loadMore" hidden>Load more</button>
+            <button class="btn btn-primary load-more" id="loadMore" hidden>عرض المزيد</button>
         </main>
         
         <dialog class="details" id="details">
