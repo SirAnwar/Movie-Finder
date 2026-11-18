@@ -22,6 +22,7 @@
   --glass: rgba(232, 218, 184, .14);
   --glass-border: rgba(232, 218, 184, .28);
   --glass-blur: blur(16px);
+  --glass-strong: rgba(232, 218, 184, .22);
 
   /* Fonts */
   --font-display: "Rakkas", serif;
@@ -46,6 +47,7 @@
 
   /* Shadow */
   --shadow: 0 8px 24px rgba(0, 0, 0, .3);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, .5);
 }
 
 /* Base */
@@ -67,6 +69,10 @@ body {
 h1, h2, h3 {
   font-family: var(--font-display);
   font-weight: 400;
+}
+
+:lang(en) {
+  font-family: var(--font-display-en);
 }
 
 a {
@@ -129,6 +135,7 @@ button, input {
 
   .auth {
     display: flex;
+
     gap: var(--space-4);
   }
 }
@@ -342,12 +349,206 @@ button, input {
     font-size: .875rem;
     font-weight: 700;
     color: var(--ink-dark);
+
+    &:lang(en) {
+      font-family: var(--font-display-en);
+      font-weight: 400;
+    }
   }
 
   p {
     margin-block-start: 2px;
     font-size: .71875rem;
     color: var(--ink-dark-2);
+  }
+}
+
+/* Details */
+.details {
+  width: min(900px, calc(100% - 2rem));
+  max-height: calc(100% - 4rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-l);
+  background: var(--glass-strong);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow: var(--shadow-lg);
+  color: var(--ink-1);
+
+  &::backdrop {
+    background: rgba(32, 24, 17, .66);
+    backdrop-filter: blur(5px);
+  }
+
+  .close-details {
+    position: absolute;
+    inset-block-start: 20px;
+    inset-inline-end: 20px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    color: var(--ink-dark);
+    cursor: pointer;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+  }
+
+  .details-content {
+    padding: 2.5rem;
+  }
+
+  .details-main {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .details-poster {
+    flex: 0 0 260px;
+    align-self: flex-start;
+    padding: var(--space-3);
+    background: var(--surface);
+    border-radius: 4px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .4);
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+  }
+
+  .details-info {
+    flex: 1;
+    min-width: 0;
+    padding-inline-end: 1.875rem;
+
+    h2 {
+      margin-block-end: 6px;
+      font-size: 2.25rem;
+    }
+
+    .tagline {
+      margin-block-end: .875rem;
+      font-size: .9375rem;
+      font-style: italic;
+      color: var(--ink-2);
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      margin-block-end: var(--space-4);
+      font-size: .875rem;
+      color: var(--ink-2);
+    }
+
+    .score {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-1);
+      font-weight: 700;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        fill: var(--mid);
+      }
+    }
+
+    .genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-block-end: var(--space-5);
+    }
+
+    .genre {
+      padding: 6px .875rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--ink-2);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-block-end: var(--space-5);
+    }
+
+    .trailer {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      padding: .75rem 1.625rem;
+      border-radius: var(--radius-pill);
+      box-shadow: none;
+
+      svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+
+    .heart {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      cursor: pointer;
+
+      svg {
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: var(--ink-dark-2);
+        stroke-width: 1.8;
+      }
+    }
+
+    .overview {
+      font-size: .90625rem;
+      line-height: 1.8;
+      color: var(--ink-2);
+    }
+  }
+
+  .player {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-block-start: 1.75rem;
+    border: none;
+    border-radius: 12px;
   }
 }
 
