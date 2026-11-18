@@ -8,14 +8,10 @@ const PLACEHOLDERS = {
 };
 
 // Elements 
-const menuLinks = document.querySelectorAll(".nav-item:has(.submenu) > a");
-const menuToggle = document.getElementById("menuToggle");
-const navSearch = document.getElementById("navSearch");
 const searchInput = document.getElementById("searchInput");
 const moviesContainer = document.getElementById("movies");
 const timeButtons = document.querySelectorAll("[data-time]");
 const typeLinks = document.querySelectorAll("[data-type]");
-const categoryLinks = document.querySelectorAll("[data-category]");
 const sectionTitle = document.getElementById("sectionTitle");
 const timeToggle = document.getElementById("timeToggle");
 const searchForm = document.getElementById("searchForm");
@@ -28,38 +24,6 @@ const detailsContent = document.getElementById("detailsContent");
 let currentType = "movie";
 let currentTime = "day";
 let lastLoad = { path: "", type: "", page: 1 };
-
-// Submenus
-menuLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-        event.preventDefault();
-        const navItem = link.closest(".nav-item");
-        document.querySelectorAll(".nav-item.open").forEach((item) => {
-            if (item !== navItem) {
-                item.classList.remove("open");
-            }
-        });
-        navItem.classList.toggle("open");
-    });
-});
-
-// Sidebar toggle
-menuToggle.addEventListener("click", () => {
-    document.body.classList.toggle("sidebar-closed");
-});
-
-if (window.matchMedia("(max-width: 768px)").matches) {
-    document.body.classList.add("sidebar-closed");
-}
-
-// Nav Search
-navSearch.addEventListener("click", () => {
-    if (window.matchMedia("(max-width: 768px)").matches) {
-        document.body.classList.add("sidebar-closed");
-    }
-    searchInput.scrollIntoView({ behavior: "smooth" });
-    searchInput.focus({ preventScroll: true });
-});
 
 // Time toggle
 timeButtons.forEach((button) => {
@@ -75,22 +39,12 @@ timeButtons.forEach((button) => {
 typeLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
         event.preventDefault();
+        typeLinks.forEach((item) => item.classList.remove("active"));
+        link.classList.add("active");
         currentType = link.dataset.type;
         searchInput.placeholder = PLACEHOLDERS[ currentType ];
         getTrending(currentType, currentTime);
         setSectionHeader("Trending", false);
-    });
-});
-
-// Category links
-categoryLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-        event.preventDefault();
-        const typeLink = link.closest(".nav-item").querySelector("[data-type]");
-        const type = typeLink.dataset.type;
-        const category = link.dataset.category;
-        getCategory(type, category);
-        setSectionHeader(typeLink.textContent + " › " + link.textContent, true);
     });
 });
 
@@ -258,10 +212,6 @@ async function loadMovies(path, type, page = 1) {
 
 function getTrending(type, time) {
     loadMovies(`/trending/${type}/${time}`, type);
-}
-
-function getCategory(type, category) {
-    loadMovies(`/${type}/${category}`, type);
 }
 
 function getSearch(type, query) {

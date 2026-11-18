@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Movie Finder</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href= "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Rakkas&family=Abril+Fatface&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <button class="menu-toggle" id="menuToggle">&#9776;</button>
         <header class="navbar">
-            <a href="#" class="logo">Movie Finder</a>
-            <nav class="nav-links">
-                <div class="nav-item">
-                    <a href="#" data-type="movie">Movies</a>
-                    <div class="submenu">
-                        <a href="#" data-category="popular">Popular</a>
-                        <a href="#" data-category="now_playing">Now Playing</a>
-                        <a href="#" data-category="upcoming">Upcoming</a>
-                        <a href="#" data-category="top_rated">Top Rated</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="#" data-type="tv">TV shows</a>
-                    <div class="submenu">
-                        <a href="#" data-category="popular">Popular</a>
-                        <a href="#" data-category="airing_today">Airing Today</a>
-                        <a href="#" data-category="on_the_air">On TV</a>
-                        <a href="#" data-category="top_rated">Top Rated</a>
-                    </div>
-                </div>
-                <div class="nav-item">
-                    <a href="#" data-type="person">People</a>
-                </div>
-            </nav>
-            <button class="nav-search" id="navSearch">&#128269;</button>
+            <div class="brand">
+                <a href="#" class="logo">شريط</a>
+                <nav class="nav-links">
+                    <a href="#" class="active" data-type="movie">أفلام</a>
+                    <a href="#" data-type="tv">مسلسلات</a>
+                    <a href="#" data-type="person">النجوم</a>
+                </nav>
+            </div>
+            <div class="auth">
+                <a href="#" class="btn btn-ghost">دخول</a>
+                <a href="#" class="btn btn-primary">إنشاء حساب</a>
+            </div>
         </header>
 
         <section class="hero">
