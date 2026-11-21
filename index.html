@@ -3,20 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Movie Finder</title>
+        <title>شريط</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Rakkas&family=Abril+Fatface&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="/style.css">
     </head>
     <body>
         <header class="navbar">
             <div class="brand">
-                <a href="#" class="logo">شريط</a>
+                <a href="/" class="logo">شريط</a>
                 <nav class="nav-links">
-                    <a href="#" class="active" data-type="movie">أفلام</a>
-                    <a href="#" data-type="tv">مسلسلات</a>
-                    <a href="#" data-type="person">النجوم</a>
+                    <a href="/?type=movie" data-type="movie">أفلام</a>
+                    <a href="/?type=tv" data-type="tv">مسلسلات</a>
+                    <a href="/?type=person" data-type="person">النجوم</a>
                 </nav>
             </div>
             <div class="auth">
@@ -28,10 +28,10 @@
         <section class="hero">
             <h1>اعثر على فيلمك <span>المفضّل</span> القادم</h1>
             <p>ملايين الأفلام والمسلسلات والنجوم — ابحث، واحفظ، وتابع ما تحب.</p>
-            <form class="search-form" id="searchForm" role="search">
+            <form class="search-form" id="searchForm" role="search" action="/pages/search.html">
                 <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <label for="searchInput" class="visually-hidden">ابحث عن فيلم أو مسلسل أو شخص</label>
-                <input type="text" id="searchInput" placeholder="ابحث عن فيلم…">
+                <input type="text" id="searchInput" name="q" placeholder="ابحث عن فيلم أو مسلسل أو شخص…" required>
                 <button type="submit" class="btn btn-primary">بحث</button>
             </form>
         </section>
@@ -56,6 +56,6 @@
             <div class="details-content" id="detailsContent"></div>
         </dialog>
 
-        <script type="module" src="js/home.js"></script>
+        <script type="module" src="/js/home.js"></script>
     </body>
 </html>

@@ -1,24 +1,30 @@
+
 import { loadMovies } from "./render.js";
 import "./details.js";
 
 // Config
-const PLACEHOLDERS = {
-    movie: "ابحث عن فيلم…",
-    tv: "ابحث عن مسلسل…",
-    person: "ابحث عن شخص…",
+const TITLES = {
+    all: "الرائج",
+    movie: "الأفلام الرائجة",
+    tv: "المسلسلات الرائجة",
+    person: "النجوم الرائجون",
 };
 
 // Elements
-const searchInput = document.getElementById("searchInput");
 const timeButtons = document.querySelectorAll("[data-time]");
-const typeLinks = document.querySelectorAll("[data-type]");
 const sectionTitle = document.getElementById("sectionTitle");
-const timeToggle = document.getElementById("timeToggle");
-const searchForm = document.getElementById("searchForm");
 
 // State
-let currentType = "movie";
+const params = new URLSearchParams(location.search);
+const type = params.get("type") || "all";
+const currentType = TITLES[type] ? type : "all";
 let currentTime = "day";
+
+// Header
+sectionTitle.textContent = TITLES[currentType];
+if (currentType !== "all") {
+    document.querySelector(`nav [data-type="${currentType}"]`).classList.add("active");
+}
 
 // Time toggle
 timeButtons.forEach((button) => {
@@ -30,41 +36,9 @@ timeButtons.forEach((button) => {
     });
 });
 
-// Type links
-typeLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-        event.preventDefault();
-        typeLinks.forEach((item) => item.classList.remove("active"));
-        link.classList.add("active");
-        currentType = link.dataset.type;
-        searchInput.placeholder = PLACEHOLDERS[currentType];
-        getTrending(currentType, currentTime);
-        setSectionHeader("الرائج", false);
-    });
-});
-
-// Search
-searchForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const query = searchInput.value.trim();
-    if (!query) return;
-    const typeName = document.querySelector(`[data-type="${currentType}"]`).textContent;
-    setSectionHeader(`${typeName} › "${query}"`, true);
-    getSearch(currentType, query);
-});
-
 // Helpers
-function setSectionHeader(title, hideTime) {
-    sectionTitle.textContent = title;
-    timeToggle.hidden = hideTime;
-}
-
 function getTrending(type, time) {
-    loadMovies(`/trending/${type}/${time}`, type);
-}
-
-function getSearch(type, query) {
-    loadMovies(`/search/${type}?query=${encodeURIComponent(query)}`, type);
+    loadMovies(`/trending/${type}/${time}`, type, 1, 2);
 }
 
 // Start

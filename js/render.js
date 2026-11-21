@@ -24,16 +24,16 @@ const moviesContainer = document.getElementById("movies");
 const loadMoreButton = document.getElementById("loadMore");
 
 // State
-export let lastLoad = { path: "", type: "", page: 1 };
+let lastLoad = { path: "", type: "", page: 1, maxPages: Infinity };
 
 // Load more
 loadMoreButton.addEventListener("click", () => {
-    loadMovies(lastLoad.path, lastLoad.type, lastLoad.page + 1);
+    loadMovies(lastLoad.path, lastLoad.type, lastLoad.page + 1, lastLoad.maxPages);
 });
 
 // Helpers
 export function getImageUrl(path) {
-    return path ? IMAGE_URL + path : "images/no-image.svg";
+    return path ? IMAGE_URL + path : "/images/no-image.svg";
 }
 function getRatingClass(score) {
     if (score >= 7) return "high";
@@ -54,13 +54,13 @@ export function formatRating(score) {
 }
 
 // Cards
-function createMovieCard(movie) {
+function createMovieCard(movie, type) {
     const title = movie.title || movie.name;
     const date = movie.release_date || movie.first_air_date;
     const rating = formatRating(movie.vote_average);
     const ratingClass = getRatingClass(movie.vote_average);
     return `
-        <article class="movie" data-id="${movie.id}" data-lang="${movie.original_language}">
+        <article class="movie" data-id="${movie.id}" data-type="${type}" data-lang="${movie.original_language}">
             <div class="poster">
                 <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
                 <button class="heart" aria-label="إضافة إلى المفضلة">
@@ -74,7 +74,7 @@ function createMovieCard(movie) {
 }
 function createPersonCard(person) {
     return `
-        <article class="movie" data-id="${person.id}">
+        <article class="movie" data-id="${person.id}" data-type="person">
             <div class="poster">
                 <img src="${getImageUrl(person.profile_path)}" alt="${person.name}">
             </div>
@@ -89,8 +89,10 @@ function renderMovies(movies, type, append) {
         showMessage("لا توجد نتائج.");
         return;
     }
-    const createCard = type === "person" ? createPersonCard : createMovieCard;
-    const cards = movies.map(createCard).join("");
+    const cards = movies.map((item) => {
+        const itemType = item.media_type || type;
+        return itemType === "person" ? createPersonCard(item) : createMovieCard(item, itemType);
+    }).join("");
     if (append) {
         moviesContainer.insertAdjacentHTML("beforeend", cards);
     } else {
@@ -102,15 +104,16 @@ function showMessage(text) {
 }
 
 // Load
-export async function loadMovies(path, type, page = 1) {
+export async function loadMovies(path, type, page = 1, maxPages = Infinity) {
     if (page === 1) showMessage("جارٍ التحميل…");
     loadMoreButton.hidden = true;
-    lastLoad = { path: path, type: type, page: page };
+    lastLoad = { path, type, page, maxPages };
     const separator = path.includes("?") ? "&" : "?";
     try {
         const data = await fetchFromTMDB(`${path}${separator}page=${page}`);
         renderMovies(data.results, type, page > 1);
-        loadMoreButton.hidden = data.page >= data.total_pages;
+        loadMoreButton.hidden = data.page >= Math.min(data.total_pages, maxPages);
+        return data;
     } catch (error) {
         console.error(error);
         showMessage("حدث خطأ ما، يرجى المحاولة مرة أخرى.");

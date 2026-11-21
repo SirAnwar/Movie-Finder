@@ -1,5 +1,5 @@
 import { fetchFromTMDB } from "./api.js";
-import { getImageUrl, formatDate, formatRating, DEPARTMENTS, ARABIC, lastLoad } from "./render.js";
+import { getImageUrl, formatDate, formatRating, DEPARTMENTS, ARABIC } from "./render.js";
 
 // Config
 const TRAILER_BUTTON = {
@@ -17,7 +17,7 @@ const detailsContent = document.getElementById("detailsContent");
 moviesContainer.addEventListener("click", (event) => {
     const card = event.target.closest("[data-id]");
     if (!card) return;
-    openDetails(lastLoad.type, card.dataset.id, card.dataset.lang);
+    openDetails(card.dataset.type, card.dataset.id, card.dataset.lang);
 });
 
 closeDetailsButton.addEventListener("click", () => {
