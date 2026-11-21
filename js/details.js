@@ -7,6 +7,17 @@ const TRAILER_BUTTON = {
     close: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>إغلاق الإعلان`,
 };
 
+const RELEASE_TYPES = {
+    1: "العرض الأول",
+    2: "السينما (عرض محدود)",
+    3: "السينما",
+    4: "المنصّات الرقمية",
+    5: "الأقراص",
+    6: "التلفزيون",
+};
+const LOGO_URL = "https://image.tmdb.org/t/p/w92";
+const REGION = (navigator.language.split("-")[1] || "SA").toUpperCase();
+
 // Elements
 const moviesContainer = document.getElementById("movies");
 const detailsDialog = document.getElementById("details");
@@ -56,6 +67,13 @@ function createMovieDetails(movie) {
     const genres = movie.genres.map((genre) => `<span class="genre">${genre.name}</span>`).join("");
     const trailer = movie.videos.results.find((video) => video.site === "YouTube" && video.type === "Trailer");
     const overview = movie.overview || movie.translations.translations.find((item) => item.iso_639_1 === "en")?.data.overview;
+    const watch = movie["watch/providers"]?.results;
+    const providers = (watch?.[REGION] || watch?.SA || watch?.US)?.flatrate || [];
+    const countries = movie.release_dates?.results || [];
+    const country = countries.find((item) => item.iso_3166_1 === REGION) || countries.find((item) => item.iso_3166_1 === "SA") || countries.find((item) => item.iso_3166_1 === "US");
+    const releases = (country?.release_dates || []).filter((release) => new Date(release.release_date) > new Date());
+    const releasesList = releases.map((release) => `<span class="genre">${RELEASE_TYPES[release.type]}: ${formatDate(release.release_date)}</span>`).join("");
+    const providersList = providers.map((provider) => `<span class="provider"><img src="${LOGO_URL}${provider.logo_path}" alt="">${provider.provider_name}</span>`).join("");
 
     return `
         <div class="details-main">
@@ -80,6 +98,17 @@ function createMovieDetails(movie) {
                     </button>
                 </div>
                 <p class="overview">${overview || "لا يوجد وصف متاح."}</p>
+                ${releases.length ? `
+                    <div class="watch">
+                        <h3>موعد النزول</h3>
+                        <div class="providers">${releasesList}</div>
+                    </div>` : ""}
+                ${providers.length ? `
+                    <div class="watch">
+                        <h3>متوفر على</h3>
+                        <div class="providers">${providersList}</div>
+                        <p class="source">المصدر: JustWatch</p>
+                    </div>` : ""}
             </div>
         </div>`;
 }
@@ -109,8 +138,7 @@ function createPersonDetails(person) {
 
 // Open
 async function openDetails(type, id, lang) {
-    const data = await fetchFromTMDB(`/${type}/${id}?append_to_response=videos,translations&include_video_language=${lang}`);
-    const createDetails = type === "person" ? createPersonDetails : createMovieDetails;
+    const data = await fetchFromTMDB(`/${type}/${id}?append_to_response=videos,translations,release_dates,watch/providers&include_video_language=${lang}`);    const createDetails = type === "person" ? createPersonDetails : createMovieDetails;
     detailsContent.innerHTML = createDetails(data);
     detailsDialog.showModal();
 }

@@ -632,6 +632,49 @@ button, input {
       line-height: 1.8;
       color: var(--ink-2);
     }
+
+    .watch {
+      margin-block-start: var(--space-5);
+      padding-block-start: var(--space-5);
+      border-block-start: 1px solid var(--glass-border);
+
+      h3 {
+        margin-block-end: var(--space-3);
+        font-size: 1.125rem;
+      }
+    }
+
+    .providers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .provider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-block: 4px;
+      padding-inline: 4px .875rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--ink-2);
+
+      img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+      }
+    }
+
+    .source {
+      margin-block-start: var(--space-2);
+      font-size: .6875rem;
+      color: var(--ink-3);
+    }
   }
 
   .player {
