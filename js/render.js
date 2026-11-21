@@ -18,6 +18,10 @@ export const DEPARTMENTS = {
     Creator: "صناعة المحتوى",
 };
 export const ARABIC = /[؀-ۿ]/;
+const TYPE_NAMES = {
+    movie: "فيلم",
+    tv: "مسلسل",
+};
 
 // Elements
 const moviesContainer = document.getElementById("movies");
@@ -54,11 +58,17 @@ export function formatRating(score) {
 }
 
 // Cards
-function createMovieCard(movie, type) {
+function createMovieCard(movie, type, mixed) {
     const title = movie.title || movie.name;
     const date = movie.release_date || movie.first_air_date;
     const rating = formatRating(movie.vote_average);
     const ratingClass = getRatingClass(movie.vote_average);
+    const upcoming = date && new Date(date) > new Date();
+
+    let badge = "";
+    if (upcoming) badge = `<span class="badge">قادم</span>`;
+    else if (movie.vote_count > 0) badge = `<span class="rating ${ratingClass}">${rating}</span>`;
+
     return `
         <article class="movie" data-id="${movie.id}" data-type="${type}" data-lang="${movie.original_language}">
             <div class="poster">
@@ -66,10 +76,10 @@ function createMovieCard(movie, type) {
                 <button class="heart" aria-label="إضافة إلى المفضلة">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.6 8.4 2.4 5 6 5c2 0 3.4 1 4 2.2.6-1.2 2-2.2 4-2.2 3.6 0 5.4 3.4 4 6.7-2.5 4.7-10 9.3-10 9.3z"/></svg>
                 </button>
-                <span class="rating ${ratingClass}">${rating}</span>
+                ${badge}
             </div>
             <h3 ${ARABIC.test(title) ? "" : 'lang="en"'}>${title}</h3>
-            <p>${formatDate(date)}</p>
+            <p>${formatDate(date)}${mixed ? ` · ${TYPE_NAMES[type]}` : ""}</p>
         </article>`;
 }
 function createPersonCard(person) {
@@ -89,9 +99,10 @@ function renderMovies(movies, type, append) {
         showMessage("لا توجد نتائج.");
         return;
     }
+    const mixed = type === "all" || type === "multi";
     const cards = movies.map((item) => {
         const itemType = item.media_type || type;
-        return itemType === "person" ? createPersonCard(item) : createMovieCard(item, itemType);
+        return itemType === "person" ? createPersonCard(item) : createMovieCard(item, itemType, mixed);
     }).join("");
     if (append) {
         moviesContainer.insertAdjacentHTML("beforeend", cards);

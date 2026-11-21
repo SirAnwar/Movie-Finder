@@ -5,6 +5,9 @@ import "./details.js";
 const searchInput = document.getElementById("searchInput");
 const searchTitle = document.getElementById("searchTitle");
 const resultsCount = document.getElementById("resultsCount");
+const moviesContainer = document.getElementById("movies");
+const emptyState = document.getElementById("emptyState");
+const emptyWord = document.getElementById("emptyWord");
 
 // State
 const params = new URLSearchParams(location.search);
@@ -17,5 +20,18 @@ if (query) {
     word.textContent = `"${query}"`;
     searchTitle.append(" عن ", word);
     const data = await loadMovies(`/search/multi?query=${encodeURIComponent(query)}`, "multi");
-    if (data) resultsCount.textContent = `عدد النتائج: ${data.total_results.toLocaleString("ar-EG")}`;
+    if (data && data.total_results === 0) {
+        showEmptyState();
+    } else if (data) {
+        resultsCount.textContent = `عدد النتائج: ${data.total_results.toLocaleString("ar-EG")}`;
+    }
+}
+
+// Helpers
+function showEmptyState() {
+    searchTitle.hidden = true;
+    resultsCount.hidden = true;
+    moviesContainer.innerHTML = "";
+    emptyWord.textContent = `"${query}"`;
+    emptyState.hidden = false;
 }

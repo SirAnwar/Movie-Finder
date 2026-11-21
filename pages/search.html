@@ -38,6 +38,15 @@
 
             <div class="movies" id="movies"></div>
             <button class="btn btn-primary load-more" id="loadMore" hidden>عرض المزيد</button>
+
+            <div class="empty-state" id="emptyState" hidden>
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <h2>لم نعثر على نتائج لـ <span id="emptyWord"></span></h2>
+                <p>جرّب كلمة أخرى أو تأكّد من الإملاء.</p>
+                <a href="/" class="btn btn-primary">العودة إلى الرئيسية</a>
+            </div>
         </main>
 
         <dialog class="details" id="details">
