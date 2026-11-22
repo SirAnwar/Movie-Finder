@@ -58,6 +58,11 @@ detailsDialog.addEventListener("close", () => {
 // Templates
 function createMovieDetails(movie) {
     const title = movie.title || movie.name;
+    const original = movie.original_title || movie.original_name;
+    const english = movie.translations.translations.find((item) => item.iso_639_1 === "en")?.data;
+    const englishTitle = english?.title || english?.name;
+    const subtitle = original !== title ? original : englishTitle && englishTitle !== title ? englishTitle : "";
+    const subtitleLang = subtitle === original ? movie.original_language : "en";
     const date = movie.release_date || movie.first_air_date;
     const year = date ? Number(date.slice(0, 4)).toLocaleString("ar-EG", { useGrouping: false }) : "غير معروف";
     const hours = Math.floor(movie.runtime / 60).toLocaleString("ar-EG");
@@ -65,7 +70,7 @@ function createMovieDetails(movie) {
     const length = movie.number_of_seasons ? `المواسم: ${movie.number_of_seasons.toLocaleString("ar-EG")}` : `${hours} س ${minutes} د`;
     const genres = movie.genres.map((genre) => `<span class="genre">${genre.name}</span>`).join("");
     const trailer = movie.videos.results.find((video) => video.site === "YouTube" && video.type === "Trailer");
-    const overview = movie.overview || movie.translations.translations.find((item) => item.iso_639_1 === "en")?.data.overview;
+    const overview = movie.overview || english?.overview;
     const watch = movie["watch/providers"]?.results;
     const providers = (watch?.[REGION] || watch?.SA || watch?.US)?.flatrate || [];
     const countries = movie.release_dates?.results || [];
@@ -80,7 +85,8 @@ function createMovieDetails(movie) {
                 <img src="${getImageUrl(movie.poster_path)}" alt="${title}">
             </div>
             <div class="details-info">
-                <h2 ${ARABIC.test(title) ? "" : 'lang="en"'}>${title}</h2>
+                <h2 ${ARABIC.test(title) ? "" : `lang="${movie.original_language}"`}>${title}</h2>
+                ${subtitle ? `<p class="original" lang="${subtitleLang}">${subtitle}</p>` : ""}
                 ${movie.tagline ? `<p class="tagline">${movie.tagline}</p>` : ""}
                 <p class="meta">
                     <span class="score"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9-6.2 3.9 1.6-7L2 9.2l7.1-.6z"/></svg>${formatRating(movie.vote_average)}</span>

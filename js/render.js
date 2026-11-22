@@ -59,6 +59,7 @@ export function formatRating(score) {
 // Cards
 function createMovieCard(movie, type, mixed) {
     const title = movie.title || movie.name;
+    const original = movie.original_title || movie.original_name;
     const date = movie.release_date || movie.first_air_date;
     const rating = formatRating(movie.vote_average);
     const ratingClass = getRatingClass(movie.vote_average);
@@ -77,7 +78,8 @@ function createMovieCard(movie, type, mixed) {
                 </button>
                 ${badge}
             </div>
-            <h3 ${ARABIC.test(title) ? "" : 'lang="en"'}>${title}</h3>
+            <h3 ${ARABIC.test(title) ? "" : `lang="${movie.original_language}"`}>${title}</h3>
+            ${original !== title ? `<p class="original" lang="${movie.original_language}">${original}</p>` : ""}
             <p>${formatDate(date)}${mixed ? ` · ${TYPE_NAMES[type]}` : ""}</p>
         </article>`;
 }
@@ -88,6 +90,7 @@ function createPersonCard(person) {
                 <img src="${getImageUrl(person.profile_path)}" alt="${person.name}">
             </div>
             <h3>${person.name}</h3>
+            ${person.original_name && person.original_name !== person.name ? `<p class="original">${person.original_name}</p>` : ""}
             <p>${DEPARTMENTS[person.known_for_department] || person.known_for_department}</p>
         </article>`;
 }
