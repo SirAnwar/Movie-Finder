@@ -115,7 +115,7 @@ button, input {
   padding-inline: var(--space-8);
   border-block-end: 1px solid var(--glass-border);
 
-  /* Glass layer on a pseudo-element, so the mobile bottom bar can be fixed to the screen */
+  /* Glass layer on a pseudo-element */
   &::before {
     content: "";
     position: absolute;
@@ -171,155 +171,9 @@ button, input {
       display: none;
     }
 
-    /* Mobile: floating bottom bar */
+    /* On mobile these links live in the bottom bar instead (copied there by nav.js) */
     @media (max-width: 768px) {
-      position: fixed;
-      inset-inline: var(--space-4);
-      inset-block-end: 22px;
-      z-index: 20;
-      align-items: center;
-      justify-content: space-around;
-      gap: 0;
-      height: 64px;
-      padding: 6px;
-      background: rgba(232, 218, 184, .18);
-      border: 1px solid rgba(232, 218, 184, .30);
-      border-radius: 32px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 14px 32px rgba(0, 0, 0, .4);
-
-      > a,
-      .nav-menu {
-        flex: 0 0 52px;
-      }
-
-      > a,
-      .nav-menu summary {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        height: 52px;
-        border-radius: 26px;
-        color: color-mix(in srgb, var(--surface) 80%, transparent);
-        font-size: .8125rem;
-
-        &.active {
-          padding-inline: var(--space-4);
-          background: var(--accent);
-          color: #fff;
-          font-weight: 700;
-          box-shadow: 0 6px 16px rgba(123, 94, 166, .45);
-        }
-      }
-
-      > a.active,
-      .nav-menu:has(.active) {
-        flex: 1 1 auto;
-      }
-
-      .nav-icon {
-        display: block;
-        width: 19px;
-        height: 19px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1.8;
-      }
-
-      .nav-favorites {
-        display: flex;
-      }
-
-      /* Only the active item shows its name; the others keep it for screen readers */
-      :not(.active) > .nav-label {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
-      }
-    }
-  }
-
-  .nav-menu {
-    position: relative;
-
-    summary {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      list-style: none;
-      font-size: .9375rem;
-      color: var(--ink-2);
-      cursor: pointer;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      &::after {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-block-end: 1.5px solid currentColor;
-        border-inline-end: 1.5px solid currentColor;
-        transform: translateY(-2px) rotate(45deg);
-        transition: transform .2s;
-      }
-
-      &:hover,
-      &.active {
-        color: var(--ink-1);
-      }
-
-      &.active {
-        font-weight: 600;
-      }
-    }
-
-    &[open] summary::after {
-      transform: translateY(2px) rotate(-135deg);
-    }
-
-    .menu {
-      position: absolute;
-      inset-block-start: calc(100% + .75rem);
-      inset-inline-start: calc(var(--space-3) * -1);
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      min-width: 190px;
-      padding: var(--space-2);
-      background: color-mix(in srgb, var(--bg) 85%, var(--surface));
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-m);
-      box-shadow: var(--shadow);
-
-      a {
-        padding: var(--space-2) var(--space-3);
-        border-radius: var(--radius-s);
-        white-space: nowrap;
-
-        &:hover {
-          background: var(--glass);
-        }
-      }
-    }
-
-    /* Mobile rules last, so they win over the rules above */
-    @media (max-width: 768px) {
-      summary::after {
-        display: none;
-      }
-
-      .menu {
-        inset-block-start: auto;
-        inset-block-end: calc(100% + 14px);
-        inset-inline-start: 0;
-      }
+      display: none;
     }
   }
 
@@ -331,6 +185,167 @@ button, input {
       .btn-primary {
         display: none;
       }
+    }
+  }
+
+  /* Mobile: slide the top bar away while scrolling down (class toggled by nav.js) */
+  @media (max-width: 768px) {
+    transition: top .3s;
+
+    &.navbar-hidden {
+      top: -6rem;
+    }
+  }
+}
+
+/* Movies dropdown (top bar on desktop, bottom bar on mobile) */
+.nav-menu {
+  position: relative;
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    font-size: .9375rem;
+    color: var(--ink-2);
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-block-end: 1.5px solid currentColor;
+      border-inline-end: 1.5px solid currentColor;
+      transform: translateY(-2px) rotate(45deg);
+      transition: transform .2s;
+    }
+
+    &:hover,
+    &.active {
+      color: var(--ink-1);
+    }
+
+    &.active {
+      font-weight: 600;
+    }
+  }
+
+  &[open] summary::after {
+    transform: translateY(2px) rotate(-135deg);
+  }
+
+  .menu {
+    position: absolute;
+    inset-block-start: calc(100% + .75rem);
+    inset-inline-start: calc(var(--space-3) * -1);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    min-width: 190px;
+    padding: var(--space-2);
+    background: color-mix(in srgb, var(--bg) 85%, var(--surface));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow);
+
+    a {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-s);
+      white-space: nowrap;
+
+      &:hover {
+        background: var(--glass);
+      }
+    }
+  }
+
+  /* Mobile rules last, so they win over the rules above */
+  @media (max-width: 768px) {
+    summary::after {
+      display: none;
+    }
+
+    .menu {
+      inset-block-start: auto;
+      inset-block-end: calc(100% + 14px);
+      inset-inline-start: 0;
+    }
+  }
+}
+
+/* Mobile bottom bar: a copy of the top links, made by nav.js, outside the header */
+.bottom-nav {
+  display: none;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    inset-inline: var(--space-4);
+    inset-block-end: 22px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 64px;
+    padding: 6px;
+    background: rgba(232, 218, 184, .18);
+    border: 1px solid rgba(232, 218, 184, .30);
+    border-radius: 32px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, .4);
+
+    > a,
+    .nav-menu {
+      flex: 0 0 52px;
+    }
+
+    > a,
+    .nav-menu summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      height: 52px;
+      border-radius: 26px;
+      color: color-mix(in srgb, var(--surface) 80%, transparent);
+      font-size: .8125rem;
+
+      &.active {
+        padding-inline: var(--space-4);
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 6px 16px rgba(123, 94, 166, .45);
+      }
+    }
+
+    > a.active,
+    .nav-menu:has(.active) {
+      flex: 1 1 auto;
+    }
+
+    .nav-icon {
+      display: block;
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+    }
+
+    /* Only the active item shows its name; the others keep it for screen readers */
+    :not(.active) > .nav-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
 }

@@ -25,7 +25,7 @@ let currentTime = "day";
 // Header
 sectionTitle.textContent = TITLES[currentType];
 if (currentType !== "all") {
-    document.querySelector(`nav [data-type="${currentType}"]`).classList.add("active");
+    document.querySelectorAll(`nav [data-type="${currentType}"]`).forEach((link) => link.classList.add("active"));
 }
 
 // Time toggle
