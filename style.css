@@ -68,6 +68,18 @@ body {
   @media (max-width: 768px) {
     padding-block-end: 100px;
   }
+
+  /* Film grain over the whole page */
+  &::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: .14;
+    mix-blend-mode: overlay;
+  }
 }
 
 h1, h2, h3 {
@@ -166,6 +178,7 @@ button, input {
       inset-block-end: 22px;
       z-index: 20;
       align-items: center;
+      justify-content: space-around;
       gap: 0;
       height: 64px;
       padding: 6px;
@@ -355,7 +368,8 @@ button, input {
     padding-inline: var(--space-4);
 
     h1,
-    p {
+    p,
+    .divider {
       display: none;
     }
   }
@@ -1124,6 +1138,110 @@ button, input {
 
   &[hidden] {
     display: none;
+  }
+}
+
+/* Divider (two thin lines with a purple diamond) */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--surface) 35%, transparent);
+  }
+
+  span {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.divider-short {
+  max-width: 220px;
+  margin-inline: auto;
+}
+
+.hero .divider {
+  margin-block-end: 1.125rem;
+}
+
+.trending .divider,
+.search-page .divider {
+  margin-block-end: 1.75rem;
+}
+
+/* The mobile design has no divider under the trending title */
+@media (max-width: 768px) {
+  .trending .divider {
+    display: none;
+  }
+}
+
+.page-intro .divider {
+  margin-block-end: .875rem;
+}
+
+.details-info .divider {
+  max-width: 160px;
+  margin-block-end: 1.125rem;
+
+  span {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+/* Film strip (a row of film holes on both ends) */
+.film-strip {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 8px;
+  padding-inline: var(--space-8);
+  background: color-mix(in srgb, var(--bg) 80%, black);
+
+  /* 6 holes of 9px with 12px gaps: 6 × 9 + 5 × 12 = 114px */
+  &::before,
+  &::after {
+    content: "";
+    width: 114px;
+    height: 9px;
+    background: repeating-linear-gradient(to right, var(--bg) 0 9px, transparent 9px 21px);
+  }
+
+  /* Mobile: 5 holes of 6px with 7px gaps: 5 × 6 + 4 × 7 = 58px */
+  @media (max-width: 768px) {
+    padding-block: 6px;
+    padding-inline: var(--space-4);
+
+    &::before,
+    &::after {
+      width: 58px;
+      height: 6px;
+      background: repeating-linear-gradient(to right, var(--bg) 0 6px, transparent 6px 13px);
+    }
+  }
+}
+
+/* Inside the classics page, stretch the strip past the page padding */
+.classics-page .film-strip {
+  margin-block-start: 2.5rem;
+  margin-inline: calc(var(--space-8) * -1);
+
+  @media (max-width: 768px) {
+    margin-block-start: var(--space-6);
+    margin-inline: calc(var(--space-4) * -1);
   }
 }
 

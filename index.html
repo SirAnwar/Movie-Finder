@@ -34,6 +34,7 @@
 
         <section class="hero">
             <h1>اعثر على فيلمك <span>المفضّل</span> القادم</h1>
+            <div class="divider divider-short" aria-hidden="true"><span></span></div>
             <p>ملايين الأفلام والمسلسلات والنجوم — ابحث، واحفظ، وتابع ما تحب.</p>
             <form class="search-form" id="searchForm" role="search" action="/pages/search.html">
                 <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -43,6 +44,8 @@
             </form>
         </section>
 
+        <div class="film-strip" aria-hidden="true"></div>
+
         <main class="trending">
             <div class="section-header">
                 <h2 id="sectionTitle">الرائج</h2>
@@ -51,6 +54,7 @@
                     <button data-time="week">هذا الأسبوع</button>
                 </div>
             </div>
+            <div class="divider" aria-hidden="true"><span></span></div>
             <div class="movies" id="movies">
             </div>
             <button class="btn btn-primary load-more" id="loadMore" hidden>عرض المزيد</button>

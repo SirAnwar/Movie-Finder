@@ -88,6 +88,7 @@ function createMovieDetails(movie) {
                 <h2 ${ARABIC.test(title) ? "" : `lang="${movie.original_language}"`}>${title}</h2>
                 ${subtitle ? `<p class="original" lang="${subtitleLang}">${subtitle}</p>` : ""}
                 ${movie.tagline ? `<p class="tagline">${movie.tagline}</p>` : ""}
+                <div class="divider" aria-hidden="true"><span></span></div>
                 <p class="meta">
                     <span class="score"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9-6.2 3.9 1.6-7L2 9.2l7.1-.6z"/></svg>${formatRating(movie.vote_average)}</span>
                     <span aria-hidden="true">•</span>

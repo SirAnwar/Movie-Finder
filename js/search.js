@@ -9,6 +9,7 @@ const resultsCount = document.getElementById("resultsCount");
 const moviesContainer = document.getElementById("movies");
 const emptyState = document.getElementById("emptyState");
 const emptyWord = document.getElementById("emptyWord");
+const searchDivider = document.getElementById("searchDivider");
 
 // State
 const params = new URLSearchParams(location.search);
@@ -32,6 +33,7 @@ if (query) {
 function showEmptyState() {
     searchTitle.hidden = true;
     resultsCount.hidden = true;
+    searchDivider.hidden = true;
     moviesContainer.innerHTML = "";
     emptyWord.textContent = `"${query}"`;
     emptyState.hidden = false;
