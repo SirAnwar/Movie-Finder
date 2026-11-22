@@ -64,6 +64,10 @@ body {
   background: var(--bg);
   color: var(--ink-1);
   font-family: var(--font-body);
+
+  @media (max-width: 768px) {
+    padding-block-end: 100px;
+  }
 }
 
 h1, h2, h3 {
@@ -97,10 +101,23 @@ button, input {
   gap: var(--space-5);
   padding-block: 1.125rem;
   padding-inline: var(--space-8);
-  background: var(--glass);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   border-block-end: 1px solid var(--glass-border);
+
+  /* Glass layer on a pseudo-element, so the mobile bottom bar can be fixed to the screen */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+
+  @media (max-width: 768px) {
+    padding-block: 1rem;
+    padding-inline: var(--space-4);
+  }
 
   .brand {
     display: flex;
@@ -113,6 +130,10 @@ button, input {
     font-family: var(--font-display);
     font-size: 1.5625rem;
     color: var(--accent-2);
+
+    @media (max-width: 768px) {
+      font-size: 1.1875rem;
+    }
   }
 
   .nav-links {
@@ -130,6 +151,82 @@ button, input {
 
       &.active {
         font-weight: 600;
+      }
+    }
+
+    .nav-icon,
+    .nav-favorites {
+      display: none;
+    }
+
+    /* Mobile: floating bottom bar */
+    @media (max-width: 768px) {
+      position: fixed;
+      inset-inline: var(--space-4);
+      inset-block-end: 22px;
+      z-index: 20;
+      align-items: center;
+      gap: 0;
+      height: 64px;
+      padding: 6px;
+      background: rgba(232, 218, 184, .18);
+      border: 1px solid rgba(232, 218, 184, .30);
+      border-radius: 32px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .4);
+
+      > a,
+      .nav-menu {
+        flex: 0 0 52px;
+      }
+
+      > a,
+      .nav-menu summary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        height: 52px;
+        border-radius: 26px;
+        color: color-mix(in srgb, var(--surface) 80%, transparent);
+        font-size: .8125rem;
+
+        &.active {
+          padding-inline: var(--space-4);
+          background: var(--accent);
+          color: #fff;
+          font-weight: 700;
+          box-shadow: 0 6px 16px rgba(123, 94, 166, .45);
+        }
+      }
+
+      > a.active,
+      .nav-menu:has(.active) {
+        flex: 1 1 auto;
+      }
+
+      .nav-icon {
+        display: block;
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+      }
+
+      .nav-favorites {
+        display: flex;
+      }
+
+      /* Only the active item shows its name; the others keep it for screen readers */
+      :not(.active) > .nav-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
       }
     }
   }
@@ -198,12 +295,30 @@ button, input {
         }
       }
     }
+
+    /* Mobile rules last, so they win over the rules above */
+    @media (max-width: 768px) {
+      summary::after {
+        display: none;
+      }
+
+      .menu {
+        inset-block-start: auto;
+        inset-block-end: calc(100% + 14px);
+        inset-inline-start: 0;
+      }
+    }
   }
 
   .auth {
     display: flex;
-
     gap: var(--space-4);
+
+    @media (max-width: 768px) {
+      .btn-primary {
+        display: none;
+      }
+    }
   }
 }
 
@@ -233,6 +348,16 @@ button, input {
 
   .search-form {
     margin-inline: auto;
+  }
+
+  @media (max-width: 768px) {
+    padding-block: 1.25rem .25rem;
+    padding-inline: var(--space-4);
+
+    h1,
+    p {
+      display: none;
+    }
   }
 }
 
@@ -281,6 +406,24 @@ button, input {
     padding: .75rem 1.625rem;
     border-radius: var(--radius-pill);
     box-shadow: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: .6875rem var(--space-4);
+
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      margin-inline-start: 0;
+    }
+
+    input {
+      font-size: .84375rem;
+    }
+
+    .btn {
+      display: none;
+    }
   }
 }
 
@@ -331,6 +474,29 @@ button, input {
       }
     }
   }
+
+  @media (max-width: 768px) {
+    padding-block: 1.375rem 1.5rem;
+    padding-inline: var(--space-4);
+
+    .section-header {
+      margin-block-end: .875rem;
+    }
+
+    h2 {
+      font-size: 1.1875rem;
+    }
+
+    .toggle {
+      gap: 3px;
+      padding: 3px;
+
+      button {
+        padding: 5px 11px;
+        font-size: .6875rem;
+      }
+    }
+  }
 }
 
 /* Search page */
@@ -358,7 +524,16 @@ button, input {
   }
 
   .movies {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    --cols: 4;
+  }
+
+  @media (max-width: 768px) {
+    padding-block: 1.25rem 1.5rem;
+    padding-inline: var(--space-4);
+
+    h1 {
+      font-size: 1.25rem;
+    }
   }
 
   .empty-state {
@@ -443,15 +618,39 @@ button, input {
   }
 
   .movies {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    --cols: 4;
+  }
+
+  @media (max-width: 768px) {
+    padding-block: var(--space-5) 1.5rem;
+    padding-inline: var(--space-4);
+
+    .page-intro h1 {
+      font-size: 1.5rem;
+    }
+
+    .classics-section {
+      margin-block-start: var(--space-6);
+
+      h2 {
+        margin-block-end: .875rem;
+        font-size: 1.1875rem;
+      }
+    }
   }
 }
 
 /* Cards */
 .movies {
+  --cols: 6;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
   gap: 1.75rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
 
   .message {
     grid-column: 1 / -1;
@@ -536,6 +735,39 @@ button, input {
     }
   }
 
+  @media (max-width: 768px) {
+    padding: .5rem .5rem .625rem;
+
+    .poster {
+      .heart {
+        inset-block-start: 7px;
+        inset-inline-end: 7px;
+        width: 26px;
+        height: 26px;
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+      }
+
+      .rating {
+        inset-block-end: 7px;
+        inset-inline-start: 7px;
+        width: 28px;
+        height: 28px;
+        font-size: .59375rem;
+      }
+
+      .badge {
+        inset-block-end: 7px;
+        inset-inline-start: 7px;
+        padding: 4px .5rem;
+        font-size: .59375rem;
+      }
+    }
+  }
+
   h3 {
     margin-block-start: .625rem;
     font-family: var(--font-body);
@@ -558,6 +790,21 @@ button, input {
   .original {
     font-family: var(--font-display-en);
     font-size: .6875rem;
+  }
+
+  @media (max-width: 768px) {
+    h3 {
+      margin-block-start: .5rem;
+      font-size: .78125rem;
+    }
+
+    p {
+      font-size: .65625rem;
+    }
+
+    .original {
+      font-size: .625rem;
+    }
   }
 }
 
@@ -797,6 +1044,47 @@ button, input {
     margin-block-start: 1.75rem;
     border: none;
     border-radius: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .close-details {
+      inset-block-start: 12px;
+      inset-inline-end: 12px;
+    }
+
+    .details-content {
+      padding: 1.25rem;
+    }
+
+    .details-main {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-5);
+    }
+
+    .details-poster {
+      flex-basis: auto;
+      align-self: center;
+      width: 160px;
+      padding: var(--space-2);
+    }
+
+    .details-info {
+      width: 100%;
+      padding-inline-end: 0;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .original {
+        font-size: 1rem;
+      }
+    }
+
+    .player {
+      margin-block-start: var(--space-5);
+    }
   }
 }
 
