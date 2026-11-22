@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>الكلاسيكيات — شريط</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Rakkas&family=Abril+Fatface&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <header class="navbar">
+            <div class="brand">
+                <a href="/" class="logo">شريط</a>
+                <nav class="nav-links">
+                    <details class="nav-menu" id="navMenu">
+                        <summary class="active" data-type="movie">أفلام</summary>
+                        <div class="menu">
+                            <a href="/?type=movie">الأفلام الرائجة</a>
+                            <a href="/pages/classics.html">الأفلام الكلاسيكية</a>
+                        </div>
+                    </details>
+                    <a href="/?type=tv" data-type="tv">مسلسلات</a>
+                    <a href="/?type=person" data-type="person">النجوم</a>
+                </nav>
+            </div>
+            <div class="auth">
+                <a href="#" class="btn btn-ghost">دخول</a>
+                <a href="#" class="btn btn-primary">إنشاء حساب</a>
+            </div>
+        </header>
+
+        <main class="classics-page">
+            <section class="page-intro">
+                <h1>الأفلام الكلاسيكية الأكثر شهرة</h1>
+                <p>أفلام خلّدها الزمن — من هوليوود القديمة ومن السينما العربية.</p>
+            </section>
+
+            <section class="classics-section">
+                <h2>كلاسيكيات هوليوود</h2>
+                <div class="movies" id="hollywood"></div>
+                <button class="btn btn-primary load-more" id="hollywoodMore" hidden>عرض المزيد</button>
+            </section>
+
+            <section class="classics-section">
+                <h2>كلاسيكيات عربية</h2>
+                <div class="movies" id="arabic"></div>
+                <button class="btn btn-primary load-more" id="arabicMore" hidden>عرض المزيد</button>
+            </section>
+        </main>
+
+        <dialog class="details" id="details">
+            <button class="close-details" id="closeDetails" aria-label="إغلاق">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+            <div class="details-content" id="detailsContent"></div>
+        </dialog>
+
+        <script type="module" src="/js/classics.js"></script>
+    </body>
+</html>

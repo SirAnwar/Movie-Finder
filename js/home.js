@@ -1,6 +1,7 @@
 
 import { loadMovies } from "./render.js";
 import "./details.js";
+import "./nav.js";
 
 // Config
 const TITLES = {
@@ -13,6 +14,7 @@ const TITLES = {
 // Elements
 const timeButtons = document.querySelectorAll("[data-time]");
 const sectionTitle = document.getElementById("sectionTitle");
+const moviesContainer = document.getElementById("movies");
 
 // State
 const params = new URLSearchParams(location.search);
@@ -38,7 +40,7 @@ timeButtons.forEach((button) => {
 
 // Helpers
 function getTrending(type, time) {
-    loadMovies(`/trending/${type}/${time}`, type, 1, 2);
+    loadMovies(moviesContainer, `/trending/${type}/${time}`, type, 1, 2);
 }
 
 // Start

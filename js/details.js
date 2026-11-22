@@ -19,13 +19,12 @@ const LOGO_URL = "https://image.tmdb.org/t/p/w92";
 const REGION = (navigator.language.split("-")[1] || "SA").toUpperCase();
 
 // Elements
-const moviesContainer = document.getElementById("movies");
 const detailsDialog = document.getElementById("details");
 const closeDetailsButton = document.getElementById("closeDetails");
 const detailsContent = document.getElementById("detailsContent");
 
 // Events
-moviesContainer.addEventListener("click", (event) => {
+document.addEventListener("click", (event) => {
     const card = event.target.closest("[data-id]");
     if (!card) return;
     openDetails(card.dataset.type, card.dataset.id, card.dataset.lang);

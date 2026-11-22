@@ -24,15 +24,14 @@ const TYPE_NAMES = {
 };
 
 // Elements
-const moviesContainer = document.getElementById("movies");
 const loadMoreButton = document.getElementById("loadMore");
 
 // State
-let lastLoad = { path: "", type: "", page: 1, maxPages: Infinity };
+let lastLoad = { container: null, path: "", type: "", page: 1, maxPages: Infinity };
 
 // Load more
-loadMoreButton.addEventListener("click", () => {
-    loadMovies(lastLoad.path, lastLoad.type, lastLoad.page + 1, lastLoad.maxPages);
+loadMoreButton?.addEventListener("click", () => {
+    loadMovies(lastLoad.container, lastLoad.path, lastLoad.type, lastLoad.page + 1, lastLoad.maxPages);
 });
 
 // Helpers
@@ -94,9 +93,9 @@ function createPersonCard(person) {
 }
 
 // Render
-function renderMovies(movies, type, append) {
+export function renderMovies(container, movies, type, append) {
     if (movies.length === 0 && !append) {
-        showMessage("لا توجد نتائج.");
+        showMessage(container, "لا توجد نتائج.");
         return;
     }
     const mixed = type === "all" || type === "multi";
@@ -105,28 +104,28 @@ function renderMovies(movies, type, append) {
         return itemType === "person" ? createPersonCard(item) : createMovieCard(item, itemType, mixed);
     }).join("");
     if (append) {
-        moviesContainer.insertAdjacentHTML("beforeend", cards);
+        container.insertAdjacentHTML("beforeend", cards);
     } else {
-        moviesContainer.innerHTML = cards;
+        container.innerHTML = cards;
     }
 }
-function showMessage(text) {
-    moviesContainer.innerHTML = `<p class="message">${text}</p>`;
+export function showMessage(container, text) {
+    container.innerHTML = `<p class="message">${text}</p>`;
 }
 
 // Load
-export async function loadMovies(path, type, page = 1, maxPages = Infinity) {
-    if (page === 1) showMessage("جارٍ التحميل…");
-    loadMoreButton.hidden = true;
-    lastLoad = { path, type, page, maxPages };
+export async function loadMovies(container, path, type, page = 1, maxPages = Infinity) {
+    if (page === 1) showMessage(container, "جارٍ التحميل…");
+    if (loadMoreButton) loadMoreButton.hidden = true;
+    lastLoad = { container, path, type, page, maxPages };
     const separator = path.includes("?") ? "&" : "?";
     try {
         const data = await fetchFromTMDB(`${path}${separator}page=${page}`);
-        renderMovies(data.results, type, page > 1);
-        loadMoreButton.hidden = data.page >= Math.min(data.total_pages, maxPages);
+        renderMovies(container, data.results, type, page > 1);
+        if (loadMoreButton) loadMoreButton.hidden = data.page >= Math.min(data.total_pages, maxPages);
         return data;
     } catch (error) {
         console.error(error);
-        showMessage("حدث خطأ ما، يرجى المحاولة مرة أخرى.");
+        showMessage(container, "حدث خطأ ما، يرجى المحاولة مرة أخرى.");
     }
 }

@@ -1,5 +1,6 @@
 import { loadMovies } from "./render.js";
 import "./details.js";
+import "./nav.js";
 
 // Elements
 const searchInput = document.getElementById("searchInput");
@@ -19,7 +20,7 @@ if (query) {
     const word = document.createElement("span");
     word.textContent = `"${query}"`;
     searchTitle.append(" عن ", word);
-    const data = await loadMovies(`/search/multi?query=${encodeURIComponent(query)}`, "multi");
+    const data = await loadMovies(moviesContainer, `/search/multi?query=${encodeURIComponent(query)}`, "multi");
     if (data && data.total_results === 0) {
         showEmptyState();
     } else if (data) {

@@ -134,6 +134,72 @@ button, input {
     }
   }
 
+  .nav-menu {
+    position: relative;
+
+    summary {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+      font-size: .9375rem;
+      color: var(--ink-2);
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::after {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-block-end: 1.5px solid currentColor;
+        border-inline-end: 1.5px solid currentColor;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform .2s;
+      }
+
+      &:hover,
+      &.active {
+        color: var(--ink-1);
+      }
+
+      &.active {
+        font-weight: 600;
+      }
+    }
+
+    &[open] summary::after {
+      transform: translateY(2px) rotate(-135deg);
+    }
+
+    .menu {
+      position: absolute;
+      inset-block-start: calc(100% + .75rem);
+      inset-inline-start: calc(var(--space-3) * -1);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      min-width: 190px;
+      padding: var(--space-2);
+      background: color-mix(in srgb, var(--bg) 85%, var(--surface));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-m);
+      box-shadow: var(--shadow);
+
+      a {
+        padding: var(--space-2) var(--space-3);
+        border-radius: var(--radius-s);
+        white-space: nowrap;
+
+        &:hover {
+          background: var(--glass);
+        }
+      }
+    }
+  }
+
   .auth {
     display: flex;
 
@@ -343,6 +409,41 @@ button, input {
       stroke: var(--ink-3);
       stroke-width: 1.8;
     }
+  }
+}
+
+/* Classics page */
+.classics-page {
+  padding-block: var(--space-7) 4.5rem;
+  padding-inline: var(--space-8);
+
+  .page-intro {
+    max-width: 760px;
+    margin-inline: auto;
+    text-align: center;
+
+    h1 {
+      margin-block-end: .625rem;
+      font-size: 2.125rem;
+    }
+
+    p {
+      font-size: .90625rem;
+      color: var(--ink-2);
+    }
+  }
+
+  .classics-section {
+    margin-block-start: 2.25rem;
+
+    h2 {
+      margin-block-end: 1.25rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  .movies {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

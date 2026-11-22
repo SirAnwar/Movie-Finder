@@ -14,7 +14,13 @@
             <div class="brand">
                 <a href="/" class="logo">شريط</a>
                 <nav class="nav-links">
-                    <a href="/?type=movie" data-type="movie">أفلام</a>
+                    <details class="nav-menu" id="navMenu">
+                        <summary data-type="movie">أفلام</summary>
+                        <div class="menu">
+                            <a href="/?type=movie">الأفلام الرائجة</a>
+                            <a href="/pages/classics.html">الأفلام الكلاسيكية</a>
+                        </div>
+                    </details>
                     <a href="/?type=tv" data-type="tv">مسلسلات</a>
                     <a href="/?type=person" data-type="person">النجوم</a>
                 </nav>
