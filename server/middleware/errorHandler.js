@@ -5,9 +5,10 @@ const notFound = (req, res) => {
 
 // Any error thrown in a route or controller ends up here
 const errorHandler = (err, req, res, next) => {
-    // Same favorite added twice (blocked by the unique index)
+    // Duplicate value blocked by a unique index: a registered email, or the same favorite twice
     if (err.code === 11000) {
-        return res.status(409).json({ message: "الفيلم موجود في المفضّلة" });
+        const message = err.keyValue?.email ? "البريد الإلكتروني مستخدم مسبقًا" : "الفيلم موجود في المفضّلة";
+        return res.status(409).json({ message });
     }
 
     // Missing or wrong data (required fields, enum, wrong types)
