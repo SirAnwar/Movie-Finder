@@ -1,5 +1,5 @@
 // Config
-const BASE_URL = "/api";
+const BASE_URL = "/tmdb";
 
 // API
 export async function fetchFromTMDB(path) {

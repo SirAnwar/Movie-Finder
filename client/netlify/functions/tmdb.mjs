@@ -1,6 +1,6 @@
 export default async (request) => {
     const url = new URL(request.url);
-    const path = url.pathname.replace("/api", "");
+    const path = url.pathname.replace("/tmdb", "");
     const response = await fetch(`https://api.themoviedb.org/3${path}${url.search}`, {
         headers: {
             authorization: `Bearer ${process.env.TMDB_TOKEN}`,
@@ -13,5 +13,5 @@ export default async (request) => {
 };
 
 export const config = {
-    path: "/api/*",
+    path: "/tmdb/*",
 };
