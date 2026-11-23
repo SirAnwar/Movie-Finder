@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.get("/api/health", (req, res) => {
