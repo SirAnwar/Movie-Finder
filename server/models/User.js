@@ -3,9 +3,26 @@ const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true, trim: true },
-        email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-        password: { type: String, required: true, select: false },
+        name: {
+            type: String,
+            required: [true, "الاسم مطلوب"],
+            trim: true,
+            maxlength: [50, "الاسم طويل جدًا"],
+        },
+        email: {
+            type: String,
+            required: [true, "البريد الإلكتروني مطلوب"],
+            unique: true,
+            lowercase: true,
+            trim: true,
+            match: [/^\S+@\S+\.\S+$/, "البريد الإلكتروني غير صالح"],
+        },
+        password: {
+            type: String,
+            required: [true, "كلمة المرور مطلوبة"],
+            minlength: [8, "كلمة المرور يجب أن تكون ٨ أحرف على الأقل"],
+            select: false,
+        },
     },
     { timestamps: true }
 );

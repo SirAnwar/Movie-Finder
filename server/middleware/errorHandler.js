@@ -11,8 +11,14 @@ const errorHandler = (err, req, res, next) => {
         return res.status(409).json({ message });
     }
 
-    // Missing or wrong data (required fields, enum, wrong types)
-    if (err.name === "ValidationError" || err.name === "CastError") {
+    // Model validation failed: send the first rule's message
+    if (err.name === "ValidationError") {
+        const message = Object.values(err.errors)[0].message;
+        return res.status(400).json({ message });
+    }
+
+    // A value of the wrong type, like a word instead of a number
+    if (err.name === "CastError") {
         return res.status(400).json({ message: "بيانات غير صحيحة" });
     }
 
