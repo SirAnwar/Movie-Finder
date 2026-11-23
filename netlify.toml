@@ -1,0 +1,5 @@
+# The frontend lives in /client, the Express API will live in /server (deployed on Render)
+[build]
+  base = "client"
+  publish = "."
+  functions = "netlify/functions"
