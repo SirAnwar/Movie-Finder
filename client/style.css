@@ -677,6 +677,187 @@ button, input {
   }
 }
 
+/* Auth pages (login, sign up, forgot, reset) */
+.auth-page {
+  display: grid;
+  place-items: center;
+  padding: 3.5rem var(--space-5);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem;
+  background: color-mix(in srgb, var(--surface) 18%, transparent);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-l);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+
+  h1 {
+    margin-block-end: .625rem;
+    font-size: 1.875rem;
+  }
+
+  .divider {
+    max-width: 140px;
+    margin-block-end: .875rem;
+
+    span {
+      width: 5px;
+      height: 5px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-6) 0;
+    background: none;
+    border: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+}
+
+.auth-subtitle {
+  margin-block-end: 1.75rem;
+  font-size: .875rem;
+  color: var(--ink-2);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+
+  .btn-primary {
+    margin-block-start: var(--space-2);
+    padding-block: .8125rem;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: .8125rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+
+  input {
+    width: 100%;
+    padding: .75rem .875rem;
+    background: color-mix(in srgb, var(--surface) 6%, transparent);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-s);
+    outline: none;
+    color: var(--ink-1);
+    font-size: .875rem;
+
+    /* Email is typed left-to-right but stays on the right, like the design */
+    &[dir="ltr"] {
+      text-align: right;
+    }
+
+    &::placeholder {
+      color: var(--ink-3);
+    }
+
+    /* Keep the browser's autofill from painting the field white */
+    &:autofill {
+      -webkit-text-fill-color: var(--ink-1);
+      transition: background-color 99999s;
+    }
+
+    &:focus {
+      border-color: var(--accent-2);
+    }
+  }
+}
+
+.field-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  a {
+    font-size: .78125rem;
+    color: var(--ink-2);
+  }
+}
+
+.password-box {
+  position: relative;
+
+  input {
+    padding-inline-end: 2.75rem;
+  }
+}
+
+.toggle-password {
+  position: absolute;
+  inset-inline-end: 10px;
+  top: 50%;
+  translate: 0 -50%;
+  display: flex;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: var(--ink-3);
+  cursor: pointer;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+}
+
+.form-error {
+  padding: 7px 10px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border-radius: 8px;
+  color: var(--danger);
+  font-size: .78125rem;
+  font-weight: 600;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.auth-or {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-block: var(--space-5);
+  font-size: .75rem;
+  color: var(--ink-3);
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--glass-border);
+  }
+}
+
+.auth-switch {
+  text-align: center;
+  font-size: .875rem;
+  color: var(--ink-2);
+
+  a {
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+}
+
 /* Cards */
 .movies {
   --cols: 6;
