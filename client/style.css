@@ -889,6 +889,70 @@ button, input {
   }
 }
 
+.auth-switch-gap {
+  margin-block-start: var(--space-5);
+}
+
+/* "Done" state: green check, title, text (forgot sent, password changed) */
+.auth-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &[hidden] {
+    display: none;
+  }
+
+  h1 {
+    font-size: 1.625rem;
+  }
+
+  p {
+    max-width: 300px;
+    margin-block-end: 1.75rem;
+    line-height: 1.7;
+    font-size: .875rem;
+    color: var(--ink-2);
+  }
+}
+
+.done-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-block-end: 1.375rem;
+  background: color-mix(in srgb, var(--good) 18%, transparent);
+  border: 1px solid var(--good);
+  border-radius: 50%;
+
+  svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: var(--good);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.link-button {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--accent-2);
+  font-size: .84375rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: .6;
+    cursor: default;
+  }
+}
+
 /* Legal pages (terms, privacy) */
 .legal-page {
   padding: 3.5rem var(--space-5);
