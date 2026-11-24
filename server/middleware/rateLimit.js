@@ -9,4 +9,13 @@ const authLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-module.exports = { authLimiter };
+// Max 3 reset emails per hour from the same IP
+const forgotLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    limit: 3,
+    message: { message: "طلبات كثيرة، يرجى المحاولة بعد ساعة" },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+module.exports = { authLimiter, forgotLimiter };
