@@ -938,6 +938,23 @@ button, input {
   }
 }
 
+.done-icon-danger {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  border-color: var(--danger);
+
+  svg {
+    stroke: var(--danger);
+  }
+}
+
+/* A full-width button (links that look like the form's main button) */
+.btn-block {
+  display: block;
+  width: 100%;
+  padding-block: .8125rem;
+  text-align: center;
+}
+
 .link-button {
   padding: 0;
   background: none;
