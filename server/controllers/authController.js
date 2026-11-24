@@ -20,7 +20,7 @@ const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 // Sign a token with the user's id and put it in the cookie
 const sendToken = (res, user) => {
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id, version: user.tokenVersion }, process.env.JWT_SECRET, { expiresIn: "7d" });
     res.cookie("token", token, { ...COOKIE_OPTIONS, maxAge: SEVEN_DAYS });
 };
 
@@ -98,6 +98,7 @@ const resetPassword = async (req, res) => {
     user.password = password;
     user.resetToken = undefined;
     user.resetTokenExpires = undefined;
+    user.tokenVersion += 1;
     await user.save();
 
     res.json({ message: "تم تغيير كلمة المرور، يمكنك تسجيل الدخول الآن" });
