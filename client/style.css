@@ -889,6 +889,65 @@ button, input {
   }
 }
 
+/* Legal pages (terms, privacy) */
+.legal-page {
+  padding: 3.5rem var(--space-5);
+}
+
+.legal-card {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 2.5rem;
+  background: color-mix(in srgb, var(--surface) 18%, transparent);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-l);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+
+  h1 {
+    margin-block-end: .625rem;
+    font-size: 1.875rem;
+  }
+
+  .divider {
+    max-width: 140px;
+    margin-block-end: .875rem;
+
+    span {
+      width: 5px;
+      height: 5px;
+    }
+  }
+
+  section {
+    margin-block-start: var(--space-5);
+  }
+
+  h2 {
+    margin-block-end: 6px;
+    font-size: 1.25rem;
+  }
+
+  p {
+    line-height: 1.8;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-6) 0;
+    background: none;
+    border: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+}
+
+/* Inside .legal-card so it beats ".legal-card p" */
+.legal-card .legal-updated {
+  font-size: .8125rem;
+  color: var(--ink-3);
+}
+
 /* Cards */
 .movies {
   --cols: 6;
