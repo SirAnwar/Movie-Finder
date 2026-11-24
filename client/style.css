@@ -724,6 +724,37 @@ button, input {
   color: var(--ink-2);
 }
 
+.auth-card-wide {
+  max-width: 440px;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: .625rem;
+  margin-block-start: 4px;
+  font-size: .78125rem;
+  color: var(--ink-2);
+  cursor: pointer;
+
+  input {
+    margin-block-start: 3px;
+    accent-color: var(--accent);
+  }
+
+  a {
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+}
+
+.form-note {
+  margin-block-start: -4px;
+  text-align: center;
+  font-size: .71875rem;
+  color: var(--ink-3);
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
