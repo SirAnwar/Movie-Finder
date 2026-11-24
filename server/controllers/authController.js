@@ -1,9 +1,14 @@
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const User = require("../models/User");
+const { sendResetEmail } = require("../services/emailService");
 
 // Same message for a wrong email or a wrong password,
 // so nobody can find out which emails are registered
 const INVALID_LOGIN = "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+
+// Same reply whether the email exists or not
+const FORGOT_MESSAGE = "إذا كان هذا البريد مسجّلًا، ستصلك رسالة تحتوي على رابط لإعادة تعيين كلمة المرور.";
 
 // The token cookie: hidden from JavaScript, sent only over HTTPS in production, lasts 7 days
 const COOKIE_OPTIONS = {
@@ -54,4 +59,48 @@ const me = async (req, res) => {
     res.json({ id: user._id, name: user.name, email: user.email });
 };
 
-module.exports = { register, login, logout, me };
+// POST /api/auth/forgot-password
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "البريد الإلكتروني مطلوب" });
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) return res.json({ message: FORGOT_MESSAGE });
+
+    const token = user.createResetToken();
+    await user.save();
+
+    const link = `${process.env.CLIENT_URL}/pages/reset-password.html?token=${token}`;
+    try {
+        await sendResetEmail(user.email, link);
+    } catch (err) {
+        user.resetToken = undefined;
+        user.resetTokenExpires = undefined;
+        await user.save();
+        throw err;
+    }
+
+    res.json({ message: FORGOT_MESSAGE });
+};
+
+// POST /api/auth/reset-password
+const resetPassword = async (req, res) => {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ message: "الرابط أو كلمة المرور ناقصة" });
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({
+        resetToken: hashedToken,
+        resetTokenExpires: { $gt: Date.now() },
+    });
+    if (!user) return res.status(400).json({ message: "الرابط غير صالح أو منتهي الصلاحية" });
+
+    user.password = password;
+    user.resetToken = undefined;
+    user.resetTokenExpires = undefined;
+    await user.save();
+
+    res.json({ message: "تم تغيير كلمة المرور، يمكنك تسجيل الدخول الآن" });
+};
+
+module.exports = { register, login, logout, me, forgotPassword, resetPassword };
