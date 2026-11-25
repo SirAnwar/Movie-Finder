@@ -19,5 +19,5 @@ handleSubmit(loginForm, "جارٍ تسجيل الدخول…", async () => {
         email: loginForm.email.value,
         password: passwordInput.value,
     });
-    window.location.href = "/";
+    window.location.replace("/");
 });

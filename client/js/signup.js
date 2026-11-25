@@ -11,5 +11,5 @@ handleSubmit(signupForm, "جارٍ إنشاء الحساب…", async () => {
         email: document.getElementById("email").value,
         password: document.getElementById("password").value,
     });
-    window.location.href = "/";
+    window.location.replace("/");
 });

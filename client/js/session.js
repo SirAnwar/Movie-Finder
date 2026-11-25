@@ -76,6 +76,13 @@ function showUser(user) {
 async function loadSession() {
     try {
         const user = await apiRequest("/auth/me");
+
+        // Login / sign up pages are for guests only
+        if (document.body.hasAttribute("data-guest-only")) {
+            window.location.replace("/");
+            return;
+        }
+
         showUser(user);
     } catch {
         // Not logged in, or server unreachable: keep the guest buttons
