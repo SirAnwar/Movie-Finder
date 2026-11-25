@@ -23,3 +23,28 @@ export async function apiRequest(path, method = "GET", body) {
     }
     return data;
 }
+
+// Shared submit flow for the auth forms:
+// hide the old error, show a loading button, run the page's action, show any error
+export function handleSubmit(form, loadingText, action) {
+    const button = form.querySelector('button[type="submit"]');
+    const formError = form.querySelector(".form-error");
+    const buttonText = button.textContent;
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        formError.hidden = true;
+        button.disabled = true;
+        button.textContent = loadingText;
+
+        try {
+            await action();
+        } catch (error) {
+            formError.textContent = error.message;
+            formError.hidden = false;
+        } finally {
+            button.disabled = false;
+            button.textContent = buttonText;
+        }
+    });
+}

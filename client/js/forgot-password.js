@@ -1,4 +1,4 @@
-import { apiRequest } from "./auth-api.js";
+import { apiRequest, handleSubmit } from "./auth-api.js";
 import "./nav.js";
 
 // Elements
@@ -6,8 +6,6 @@ const forgotStep = document.getElementById("forgotStep");
 const sentStep = document.getElementById("sentStep");
 const forgotForm = document.getElementById("forgotForm");
 const emailInput = document.getElementById("email");
-const submitButton = forgotForm.querySelector('button[type="submit"]');
-const formError = document.getElementById("formError");
 const resendButton = document.getElementById("resendButton");
 
 function sendLink() {
@@ -15,23 +13,10 @@ function sendLink() {
 }
 
 // First send: show the "check your email" state
-forgotForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    formError.hidden = true;
-    submitButton.disabled = true;
-    submitButton.textContent = "جارٍ الإرسال…";
-
-    try {
-        await sendLink();
-        forgotStep.hidden = true;
-        sentStep.hidden = false;
-    } catch (error) {
-        formError.textContent = error.message;
-        formError.hidden = false;
-    } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "إرسال رابط إعادة التعيين";
-    }
+handleSubmit(forgotForm, "جارٍ الإرسال…", async () => {
+    await sendLink();
+    forgotStep.hidden = true;
+    sentStep.hidden = false;
 });
 
 // Send again with the same email
