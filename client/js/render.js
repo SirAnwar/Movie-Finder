@@ -1,5 +1,5 @@
 import { fetchFromTMDB } from "./api.js";
-import { markSavedHearts } from "./favorites.js";
+import { markSavedHearts, rememberItem } from "./favorites.js";
 
 // Config
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
@@ -105,7 +105,9 @@ export function renderMovies(container, movies, type, append) {
     const mixed = type === "all" || type === "multi";
     const cards = movies.map((item) => {
         const itemType = item.media_type || type;
-        return itemType === "person" ? createPersonCard(item) : createMovieCard(item, itemType, mixed);
+        if (itemType === "person") return createPersonCard(item);
+        rememberItem(itemType, item);
+        return createMovieCard(item, itemType, mixed);
     }).join("");
     if (append) {
         container.insertAdjacentHTML("beforeend", cards);

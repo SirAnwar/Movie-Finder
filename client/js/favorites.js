@@ -6,6 +6,13 @@ export function favoriteKey(type, id) {
     return `${type}:${id}`;
 }
 
+// Data of every title drawn on the page, by key, so a heart click can save it
+const pageItems = new Map();
+
+export function rememberItem(type, item) {
+    pageItems.set(favoriteKey(type, item.id), item);
+}
+
 // Load the user's saved keys once (an empty set for guests)
 async function loadSavedKeys() {
     const user = await sessionReady;
@@ -83,6 +90,41 @@ function showLoginPrompt() {
     loginPrompt.showModal();
 }
 
+// Save or remove one title, then update its heart
+async function toggleFavorite(heart) {
+    const card = heart.closest(".movie");
+    const { type, id } = card.dataset;
+    const key = favoriteKey(type, id);
+    const savedKeys = await savedKeysReady;
+    const saved = savedKeys.has(key);
+
+    heart.disabled = true;
+    try {
+        if (saved) {
+            await apiRequest(`/favorites/${type}/${id}`, "DELETE");
+            savedKeys.delete(key);
+        } else {
+            const item = pageItems.get(key);
+            await apiRequest("/favorites", "POST", {
+                tmdbId: item.id,
+                type,
+                title: item.title || item.name,
+                originalTitle: item.original_title || item.original_name,
+                originalLanguage: item.original_language,
+                posterPath: item.poster_path,
+                date: item.release_date || item.first_air_date,
+                rating: item.vote_average,
+            });
+            savedKeys.add(key);
+        }
+        setHeartState(heart, !saved);
+    } catch (error) {
+        console.error(error); // the toast step shows this to the user
+    } finally {
+        heart.disabled = false;
+    }
+}
+
 // Heart clicks on any card (cards are re-drawn, so listen on the whole page)
 document.addEventListener("click", async (event) => {
     const heart = event.target.closest(".movie .heart");
@@ -93,5 +135,5 @@ document.addEventListener("click", async (event) => {
         showLoginPrompt();
         return;
     }
-    console.log("toggle favorite"); // next step replaces this
+    toggleFavorite(heart);
 });
