@@ -1,4 +1,5 @@
 import { fetchFromTMDB } from "./api.js";
+import { markSavedHearts } from "./favorites.js";
 
 // Config
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
@@ -111,6 +112,7 @@ export function renderMovies(container, movies, type, append) {
     } else {
         container.innerHTML = cards;
     }
+    markSavedHearts(container);
 }
 export function showMessage(container, text) {
     container.innerHTML = `<p class="message">${text}</p>`;

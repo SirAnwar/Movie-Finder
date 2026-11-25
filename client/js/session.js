@@ -72,7 +72,8 @@ function showUser(user) {
     authArea.replaceChildren(createFavoritesLink(), createUserChip(user.name), createLogoutButton());
 }
 
-// Ask the server who is visiting, then show the right buttons
+// Ask the server who is visiting, then show the right buttons.
+// Returns the user, or null for guests.
 async function loadSession() {
     try {
         const user = await apiRequest("/auth/me");
@@ -80,15 +81,18 @@ async function loadSession() {
         // Login / sign up pages are for guests only
         if (document.body.hasAttribute("data-guest-only")) {
             window.location.replace("/");
-            return;
+            return user;
         }
 
         showUser(user);
+        return user;
     } catch {
         // Not logged in, or server unreachable: keep the guest buttons
+        return null;
     } finally {
         authArea.classList.add("is-ready");
     }
 }
 
-loadSession();
+// Other files can `await sessionReady` to get the user (or null for guests)
+export const sessionReady = loadSession();

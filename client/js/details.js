@@ -25,6 +25,7 @@ const detailsContent = document.getElementById("detailsContent");
 
 // Events
 document.addEventListener("click", (event) => {
+    if (event.target.closest(".heart")) return; // hearts are handled in favorites.js
     const card = event.target.closest("[data-id]");
     if (!card) return;
     openDetails(card.dataset.type, card.dataset.id, card.dataset.lang);

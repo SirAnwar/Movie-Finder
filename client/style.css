@@ -1208,6 +1208,11 @@ button, input {
         stroke: var(--ink-dark-2);
         stroke-width: 1.8;
       }
+
+      &.is-saved svg {
+        fill: var(--accent);
+        stroke: var(--accent);
+      }
     }
 
     .rating {
@@ -1594,6 +1599,65 @@ button, input {
       margin-block-start: var(--space-5);
     }
   }
+}
+
+/* Login prompt (a guest clicks a heart) */
+.login-prompt {
+  width: min(340px, calc(100% - 2rem));
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .3);
+  color: var(--ink-dark);
+
+  &::backdrop {
+    background: rgba(32, 24, 17, .66);
+    backdrop-filter: blur(5px);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-dark-2);
+  }
+}
+
+.login-prompt-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+}
+
+.login-prompt-actions {
+  display: flex;
+  gap: 8px;
+  margin-block-start: 4px;
+}
+
+.prompt-button {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.prompt-button-ghost {
+  border-color: rgba(59, 46, 34, .25);
+  background: transparent;
+  color: var(--ink-dark);
 }
 
 /* Buttons */
