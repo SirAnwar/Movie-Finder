@@ -1,5 +1,6 @@
 import { apiRequest } from "./auth-api.js";
 import { sessionReady } from "./session.js";
+import { showToast } from "./toast.js";
 
 // One key per saved title: type + TMDB id, e.g. "movie:550"
 export function favoriteKey(type, id) {
@@ -118,8 +119,9 @@ async function toggleFavorite(heart) {
             savedKeys.add(key);
         }
         setHeartState(heart, !saved);
+        showToast(saved ? "تمت إزالة الفيلم من المفضّلة" : "تمت إضافة الفيلم إلى المفضّلة", saved ? "danger" : "good");
     } catch (error) {
-        console.error(error); // the toast step shows this to the user
+        showToast(error.message, "danger");
     } finally {
         heart.disabled = false;
     }
