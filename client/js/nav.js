@@ -1,3 +1,5 @@
+import "./session.js";
+
 // Elements
 const navbar = document.querySelector("header");
 const navLinks = navbar.querySelector("nav");

@@ -181,6 +181,16 @@ button, input {
     display: flex;
     gap: var(--space-4);
 
+    /* Hidden until session.js knows who is visiting (no flash) */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s, visibility .25s;
+
+    &.is-ready {
+      opacity: 1;
+      visibility: visible;
+    }
+
     @media (max-width: 768px) {
       .btn-primary {
         display: none;
@@ -674,6 +684,115 @@ button, input {
         font-size: 1.1875rem;
       }
     }
+  }
+}
+
+/* Logged-in header: favorites pill */
+.favorites-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-block: 7px;
+  padding-inline: 7px 14px;
+  background: rgba(232, 218, 184, .45);
+  border-radius: var(--radius-pill);
+  color: var(--ink-1);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background .2s;
+
+  &:hover {
+    background: rgba(232, 218, 184, .55);
+  }
+
+  svg {
+    width: 17px;
+    height: 17px;
+    fill: var(--accent);
+  }
+
+  /* Mobile: favorites already lives in the bottom bar */
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+/* Logged-in header: user chip (avatar + name) */
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-block: 6px;
+  padding-inline: 6px 14px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+
+  /* Mobile: just the circle */
+  @media (max-width: 768px) {
+    padding: 0;
+    background: none;
+    border: none;
+
+    .user-name {
+      display: none;
+    }
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Logged-in header: square logout button */
+.logout-button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-s);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+
+  &:hover {
+    color: var(--ink-1);
+    border-color: var(--ink-2);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: wait;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 }
 
