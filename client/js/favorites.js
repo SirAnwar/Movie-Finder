@@ -39,8 +39,8 @@ export function setHeartState(heart, saved) {
 // Fill the hearts of saved titles inside a container
 export async function markSavedHearts(container) {
     const savedKeys = await savedKeysReady;
-    for (const heart of container.querySelectorAll(".movie .heart")) {
-        const card = heart.closest(".movie");
+    for (const heart of container.querySelectorAll(".heart")) {
+        const card = heart.closest("[data-id]");
         setHeartState(heart, savedKeys.has(favoriteKey(card.dataset.type, card.dataset.id)));
     }
 }
@@ -93,7 +93,7 @@ function showLoginPrompt() {
 
 // Save or remove one title, then update its heart
 async function toggleFavorite(heart) {
-    const card = heart.closest(".movie");
+    const card = heart.closest("[data-id]"); // the card, or the heart itself in the details dialog
     const { type, id } = card.dataset;
     const key = favoriteKey(type, id);
     const savedKeys = await savedKeysReady;
@@ -118,7 +118,7 @@ async function toggleFavorite(heart) {
             });
             savedKeys.add(key);
         }
-        setHeartState(heart, !saved);
+        markSavedHearts(document); // every heart for this title: card + details dialog
         showToast(saved ? "تمت إزالة الفيلم من المفضّلة" : "تمت إضافة الفيلم إلى المفضّلة", saved ? "danger" : "good");
     } catch (error) {
         showToast(error.message, "danger");
@@ -129,7 +129,7 @@ async function toggleFavorite(heart) {
 
 // Heart clicks on any card (cards are re-drawn, so listen on the whole page)
 document.addEventListener("click", async (event) => {
-    const heart = event.target.closest(".movie .heart");
+    const heart = event.target.closest(".heart");
     if (!heart) return;
 
     const user = await sessionReady;

@@ -1,5 +1,6 @@
 import { fetchFromTMDB } from "./api.js";
 import { getImageUrl, formatDate, formatRating, DEPARTMENTS, ARABIC } from "./render.js";
+import { markSavedHearts, rememberItem } from "./favorites.js";
 
 // Config
 const TRAILER_BUTTON = {
@@ -57,7 +58,7 @@ detailsDialog.addEventListener("close", () => {
 });
 
 // Templates
-function createMovieDetails(movie) {
+function createMovieDetails(movie, type) {
     const title = movie.title || movie.name;
     const original = movie.original_title || movie.original_name;
     const english = movie.translations.translations.find((item) => item.iso_639_1 === "en")?.data;
@@ -100,7 +101,7 @@ function createMovieDetails(movie) {
                 <div class="genres">${genres}</div>
                 <div class="actions">
                     ${trailer ? `<button class="btn btn-primary trailer" data-key="${trailer.key}">${TRAILER_BUTTON.play}</button>` : ""}
-                    <button class="heart" aria-label="إضافة إلى المفضلة">
+                    <button class="heart" data-type="${type}" data-id="${movie.id}" aria-label="إضافة إلى المفضّلة">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.6 8.4 2.4 5 6 5c2 0 3.4 1 4 2.2.6-1.2 2-2.2 4-2.2 3.6 0 5.4 3.4 4 6.7-2.5 4.7-10 9.3-10 9.3z"/></svg>
                     </button>
                 </div>
@@ -145,7 +146,12 @@ function createPersonDetails(person) {
 
 // Open
 async function openDetails(type, id, lang) {
-    const data = await fetchFromTMDB(`/${type}/${id}?append_to_response=videos,translations,release_dates,watch/providers&include_video_language=${lang}`);    const createDetails = type === "person" ? createPersonDetails : createMovieDetails;
-    detailsContent.innerHTML = createDetails(data);
+    const data = await fetchFromTMDB(`/${type}/${id}?append_to_response=videos,translations,release_dates,watch/providers&include_video_language=${lang}`);
+    const createDetails = type === "person" ? createPersonDetails : createMovieDetails;
+    detailsContent.innerHTML = createDetails(data, type);
+    if (type !== "person") {
+        rememberItem(type, data);
+        markSavedHearts(detailsContent);
+    }
     detailsDialog.showModal();
 }

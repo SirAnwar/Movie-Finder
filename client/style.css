@@ -1498,6 +1498,11 @@ button, input {
         stroke: var(--ink-dark-2);
         stroke-width: 1.8;
       }
+
+      &.is-saved svg {
+        fill: var(--accent);
+        stroke: var(--accent);
+      }
     }
 
     .overview {
