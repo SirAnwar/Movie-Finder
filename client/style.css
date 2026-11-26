@@ -1364,6 +1364,28 @@ button, input {
   }
 }
 
+/* Loading: shimmering poster boxes (States board) */
+.skeleton {
+  aspect-ratio: 2 / 3;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(232, 218, 184, .05) 0%, rgba(232, 218, 184, .14) 50%, rgba(232, 218, 184, .05) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -400px 0;
+  }
+  to {
+    background-position: 400px 0;
+  }
+}
+
 /* Details */
 .details {
   width: min(900px, calc(100% - 2rem));

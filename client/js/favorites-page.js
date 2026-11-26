@@ -1,6 +1,6 @@
 import { apiRequest } from "./auth-api.js";
 import { fetchFromTMDB } from "./api.js";
-import { renderMovies, showMessage, formatRating, getRatingClass } from "./render.js";
+import { renderMovies, showMessage, showSkeleton, formatRating, getRatingClass } from "./render.js";
 import { sessionReady } from "./session.js";
 import "./details.js";
 import "./nav.js";
@@ -63,7 +63,7 @@ async function loadFavorites() {
         return;
     }
 
-    showMessage(favoritesGrid, "جارٍ التحميل…");
+    showSkeleton(favoritesGrid);
     try {
         const favorites = await apiRequest("/favorites");
         if (favorites.length === 0) {

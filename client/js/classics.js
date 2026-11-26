@@ -1,5 +1,5 @@
 import { fetchFromTMDB } from "./api.js";
-import { renderMovies, showMessage } from "./render.js";
+import { renderMovies, showMessage, showSkeleton } from "./render.js";
 import "./details.js";
 import "./nav.js";
 
@@ -51,7 +51,7 @@ function startSection(section) {
     section.totalPages = 1;
     section.shown = 0;
     section.version = (section.version || 0) + 1;
-    showMessage(section.container, "جارٍ التحميل…");
+    showSkeleton(section.container, 8);
     showMore(section);
 }
 

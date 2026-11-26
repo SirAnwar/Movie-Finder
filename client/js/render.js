@@ -120,9 +120,24 @@ export function showMessage(container, text) {
     container.innerHTML = `<p class="message">${text}</p>`;
 }
 
+// Loading: shimmering poster-shaped boxes until the results arrive
+export function showSkeleton(container, count = 12) {
+    const label = document.createElement("span");
+    label.className = "visually-hidden";
+    label.textContent = "جارٍ التحميل…";
+
+    const boxes = Array.from({ length: count }, () => {
+        const box = document.createElement("div");
+        box.className = "skeleton";
+        return box;
+    });
+
+    container.replaceChildren(label, ...boxes);
+}
+
 // Load
 export async function loadMovies(container, path, type, page = 1, maxPages = Infinity) {
-    if (page === 1) showMessage(container, "جارٍ التحميل…");
+    if (page === 1) showSkeleton(container);
     if (loadMoreButton) loadMoreButton.hidden = true;
     lastLoad = { container, path, type, page, maxPages };
     const separator = path.includes("?") ? "&" : "?";
