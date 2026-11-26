@@ -1011,6 +1011,10 @@ button, input {
 }
 
 .form-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
   padding: 7px 10px;
   background: color-mix(in srgb, var(--surface) 85%, transparent);
   border-radius: 8px;
@@ -1018,9 +1022,24 @@ button, input {
   font-size: .78125rem;
   font-weight: 600;
 
+  /* Red circle with "!" (States board), drawn with a mask so the HTML stays the same */
+  &::before {
+    content: "";
+    flex-shrink: 0;
+    width: 13px;
+    height: 13px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 8v5M12 16h.01'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
   &[hidden] {
     display: none;
   }
+}
+
+/* After a failed submit: red borders until the user types again */
+.has-error .field input {
+  border-color: var(--danger);
 }
 
 .auth-or {

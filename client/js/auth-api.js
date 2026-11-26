@@ -63,6 +63,9 @@ export function handleSubmit(form, loadingText, action) {
     const formError = form.querySelector(".form-error");
     const buttonText = button.textContent;
 
+    // Typing again clears the red borders
+    form.addEventListener("input", () => form.classList.remove("has-error"));
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         formError.hidden = true;
@@ -74,6 +77,7 @@ export function handleSubmit(form, loadingText, action) {
         } catch (error) {
             formError.textContent = error.message;
             formError.hidden = false;
+            form.classList.add("has-error");
         } finally {
             button.disabled = false;
             button.textContent = buttonText;
