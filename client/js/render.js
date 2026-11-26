@@ -39,7 +39,7 @@ loadMoreButton?.addEventListener("click", () => {
 export function getImageUrl(path) {
     return path ? IMAGE_URL + path : "/images/no-image.svg";
 }
-function getRatingClass(score) {
+export function getRatingClass(score) {
     if (score >= 7) return "high";
     if (score >= 5) return "mid";
     return "low";

@@ -1,5 +1,6 @@
 import { apiRequest } from "./auth-api.js";
-import { renderMovies, showMessage } from "./render.js";
+import { fetchFromTMDB } from "./api.js";
+import { renderMovies, showMessage, formatRating, getRatingClass } from "./render.js";
 import { sessionReady } from "./session.js";
 import "./details.js";
 import "./nav.js";
@@ -38,6 +39,21 @@ function showEmpty() {
     emptyBox.hidden = false;
 }
 
+// The saved rating may be old: ask TMDB for today's rating, in the background
+function refreshRatings(favorites) {
+    for (const favorite of favorites) {
+        fetchFromTMDB(`/${favorite.type}/${favorite.tmdbId}`)
+            .then((data) => {
+                const card = favoritesGrid.querySelector(`.movie[data-type="${favorite.type}"][data-id="${favorite.tmdbId}"]`);
+                const rating = card?.querySelector(".rating");
+                if (!rating || !data.vote_count) return;
+                rating.textContent = formatRating(data.vote_average);
+                rating.className = `rating ${getRatingClass(data.vote_average)}`;
+            })
+            .catch(() => {}); // keep the saved rating
+    }
+}
+
 // Guests see the login box, users see their saved titles (newest first, from the server)
 async function loadFavorites() {
     emptyBox.hidden = true;
@@ -57,6 +73,7 @@ async function loadFavorites() {
         count = favorites.length;
         showCount();
         renderMovies(favoritesGrid, favorites.map(toTmdbItem), "all");
+        refreshRatings(favorites);
     } catch (error) {
         showMessage(favoritesGrid, error.message);
     }
