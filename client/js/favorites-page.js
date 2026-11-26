@@ -1,6 +1,6 @@
 import { apiRequest } from "./auth-api.js";
 import { fetchFromTMDB } from "./api.js";
-import { renderMovies, showMessage, showSkeleton, formatRating, getRatingClass } from "./render.js";
+import { renderMovies, showSkeleton, showError, formatRating, getRatingClass } from "./render.js";
 import { sessionReady } from "./session.js";
 import "./details.js";
 import "./nav.js";
@@ -75,7 +75,7 @@ async function loadFavorites() {
         renderMovies(favoritesGrid, favorites.map(toTmdbItem), "all");
         refreshRatings(favorites);
     } catch (error) {
-        showMessage(favoritesGrid, error.message);
+        showError(favoritesGrid, error, loadFavorites);
     }
 }
 

@@ -1,5 +1,5 @@
 import { fetchFromTMDB } from "./api.js";
-import { renderMovies, showMessage, showSkeleton } from "./render.js";
+import { renderMovies, showSkeleton, showError } from "./render.js";
 import "./details.js";
 import "./nav.js";
 
@@ -73,6 +73,6 @@ async function showMore(section) {
         section.button.hidden = section.shown >= section.max || !hasMore;
     } catch (error) {
         console.error(error);
-        showMessage(section.container, "حدث خطأ ما، يرجى المحاولة مرة أخرى.");
+        showError(section.container, error, () => startSection(section));
     }
 }

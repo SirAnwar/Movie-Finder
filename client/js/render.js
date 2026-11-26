@@ -1,5 +1,7 @@
 import { fetchFromTMDB } from "./api.js";
 import { markSavedHearts, rememberItem } from "./favorites.js";
+import { createIcon } from "./icons.js";
+import { showToast } from "./toast.js";
 
 // Config
 const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
@@ -22,6 +24,18 @@ export const ARABIC = /[؀-ۿ]/;
 const TYPE_NAMES = {
     movie: "فيلم",
     tv: "مسلسل",
+};
+const ERRORS = {
+    offline: {
+        icon: "M1 9a16 16 0 0 1 22 0M5 13a10 10 0 0 1 14 0M9 17a4 4 0 0 1 6 0M2 2l20 20",
+        title: "لا يوجد اتصال بالإنترنت",
+        text: "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.",
+    },
+    server: {
+        icon: "M5 4h14a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zM2 8h20M7 4v4M12 4v4M17 4v4",
+        title: "المشكلة من جانبنا، وليس منك",
+        text: "حدث خلل مؤقت في الخادم ولم نتمكّن من إتمام طلبك. يرجى المحاولة مرة أخرى بعد قليل.",
+    },
 };
 
 // Elements
@@ -135,6 +149,34 @@ export function showSkeleton(container, count = 12) {
     container.replaceChildren(label, ...boxes);
 }
 
+// Error box in place of the cards (States / error page boards), with a retry button
+export function showError(container, error, retry) {
+    const offline = !navigator.onLine || error instanceof TypeError;
+    const { icon, title, text } = offline ? ERRORS.offline : ERRORS.server;
+
+    const iconBox = document.createElement("div");
+    iconBox.className = offline ? "empty-icon" : "empty-icon is-danger";
+    iconBox.append(createIcon(icon));
+
+    const heading = document.createElement("h2");
+    heading.textContent = title;
+
+    const paragraph = document.createElement("p");
+    paragraph.textContent = text;
+
+    const button = document.createElement("button");
+    button.className = "btn btn-primary";
+    button.textContent = "إعادة المحاولة";
+    button.addEventListener("click", retry);
+
+    const box = document.createElement("div");
+    box.className = "empty-state";
+    box.setAttribute("role", "alert");
+    box.append(iconBox, heading, paragraph, button);
+
+    container.replaceChildren(box);
+}
+
 // Load
 export async function loadMovies(container, path, type, page = 1, maxPages = Infinity) {
     if (page === 1) showSkeleton(container);
@@ -148,6 +190,12 @@ export async function loadMovies(container, path, type, page = 1, maxPages = Inf
         return data;
     } catch (error) {
         console.error(error);
-        showMessage(container, "حدث خطأ ما، يرجى المحاولة مرة أخرى.");
+        if (page === 1) {
+            showError(container, error, () => loadMovies(container, path, type, page, maxPages));
+        } else {
+            // "Load more" failed: keep the cards already shown
+            showToast("تعذّر تحميل المزيد، حاول مرة أخرى", "danger");
+            if (loadMoreButton) loadMoreButton.hidden = false;
+        }
     }
 }

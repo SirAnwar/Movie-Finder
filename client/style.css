@@ -635,6 +635,17 @@ button, input {
   gap: var(--space-3);
 }
 
+/* Inside a cards grid, the box takes the whole row */
+.movies .empty-state {
+  grid-column: 1 / -1;
+}
+
+/* Server error: the film icon in red (error page board) */
+.empty-icon.is-danger svg {
+  stroke: var(--danger);
+  opacity: .6;
+}
+
 /* Classics page */
 .classics-page {
   padding-block: var(--space-7) 4.5rem;
@@ -726,6 +737,48 @@ button, input {
     .film-strip {
       margin-block: var(--space-5);
       margin-inline: calc(var(--space-4) * -1);
+    }
+  }
+}
+
+/* Error page (404) */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 3rem var(--space-5);
+  text-align: center;
+
+  .error-code {
+    margin-block-end: 6px;
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    line-height: 1;
+    color: rgba(232, 218, 184, .22);
+  }
+
+  h1 {
+    margin-block-end: .75rem;
+    font-size: 1.75rem;
+  }
+
+  p {
+    max-width: 360px;
+    margin-block-end: 2rem;
+    font-size: .90625rem;
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 768px) {
+    .error-code {
+      font-size: 3.5rem;
+    }
+
+    h1 {
+      font-size: 1.3125rem;
     }
   }
 }

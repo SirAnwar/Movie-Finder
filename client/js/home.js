@@ -1,4 +1,3 @@
-
 import { loadMovies } from "./render.js";
 import "./details.js";
 import "./nav.js";
@@ -20,6 +19,9 @@ const moviesContainer = document.getElementById("movies");
 const params = new URLSearchParams(location.search);
 const type = params.get("type") || "all";
 const currentType = TITLES[type] ? type : "all";
+
+// A wrong ?type falls back to "all": clean the address bar too
+if (type !== currentType) history.replaceState(null, "", "/");
 let currentTime = "day";
 
 // Header
