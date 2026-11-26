@@ -1,7 +1,7 @@
 const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = "Shareet <onboarding@resend.dev>";
+const FROM = "Shareet <noreply@send.shareetapp.com>";
 
 // The only place that talks to the email provider
 const sendEmail = async ({ to, subject, html }) => {
