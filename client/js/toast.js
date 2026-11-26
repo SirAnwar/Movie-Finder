@@ -1,4 +1,4 @@
-import { createIcon } from "./session.js";
+import { createIcon } from "./icons.js";
 
 const CHECK_ICON = "M20 6 9 17l-5-5";
 const CROSS_ICON = "M18 6 6 18M6 6l12 12";

@@ -1,10 +1,36 @@
+import { createIcon } from "./icons.js";
+
 const NETWORK_ERROR = "تعذّر الاتصال بالخادم، تحقّق من اتصالك بالإنترنت";
 const GENERIC_ERROR = "حدث خطأ، يرجى المحاولة مرة أخرى";
+const WAKE_DELAY = 3000;
+const SPINNER_ICON = "M21 12a9 9 0 1 1-9-9";
+
+let pendingRequests = 0;
+let wakeTimer;
+let wakeNotice; // built on the first use, then reused
+
+// The free server sleeps when idle; the first request can take about a minute
+function showWakeNotice() {
+    if (!wakeNotice) {
+        wakeNotice = document.createElement("div");
+        wakeNotice.className = "wake-notice";
+        wakeNotice.setAttribute("role", "status");
+
+        const text = document.createElement("span");
+        text.textContent = "جارٍ الاتصال بالخادم، قد يستغرق ذلك دقيقة في المرة الأولى…";
+
+        wakeNotice.append(createIcon(SPINNER_ICON), text);
+        document.body.append(wakeNotice);
+    }
+    wakeNotice.hidden = false;
+}
 
 // Talk to our Express API (/api/...) and return the JSON reply.
 // Throws an Error with the server's Arabic message when something goes wrong.
 export async function apiRequest(path, method = "GET", body) {
     let response;
+    pendingRequests++;
+    if (pendingRequests === 1) wakeTimer = setTimeout(showWakeNotice, WAKE_DELAY);
     try {
         response = await fetch(`/api${path}`, {
             method,
@@ -13,6 +39,12 @@ export async function apiRequest(path, method = "GET", body) {
         });
     } catch {
         throw new Error(NETWORK_ERROR);
+    } finally {
+        pendingRequests--;
+        if (pendingRequests === 0) {
+            clearTimeout(wakeTimer);
+            if (wakeNotice) wakeNotice.hidden = true;
+        }
     }
 
     const data = await response.json().catch(() => ({}));
