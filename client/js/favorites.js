@@ -120,6 +120,9 @@ async function toggleFavorite(heart) {
         }
         markSavedHearts(document); // every heart for this title: card + details dialog
         showToast(saved ? "تمت إزالة الفيلم من المفضّلة" : "تمت إضافة الفيلم إلى المفضّلة", saved ? "danger" : "good");
+
+        // Tell the page (the favorites page removes the card)
+        document.dispatchEvent(new CustomEvent("favorite-change", { detail: { type, id, saved: !saved } }));
     } catch (error) {
         showToast(error.message, "danger");
     } finally {
